@@ -1,0 +1,11 @@
+/*
+ *   Copyright (c) 2025 Olymp.Digital
+ *   All rights reserved.
+ */
+import { createSelector } from 'redux-orm';
+import { orm } from '../../orm';
+import { CategoryInterface } from './category.types';
+
+export const selectCategories = createSelector(orm, (session) =>
+  session.Category.all().toModelArray(),
+);
