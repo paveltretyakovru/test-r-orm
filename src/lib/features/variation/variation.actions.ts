@@ -7,9 +7,9 @@ import { createAction } from '@reduxjs/toolkit';
 import { VariationsResponse } from './variation.types';
 
 export enum variationActionType {
-  'set' = 'product-variation/set',
+  upsert = 'product-variation/set',
 }
 
-export const setVariations = createAction<VariationsResponse>(
-  variationActionType.set,
+export const upsertVariations = createAction<VariationsResponse>(
+  variationActionType.upsert,
 );

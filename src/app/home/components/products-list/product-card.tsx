@@ -45,8 +45,12 @@ export const ProductCard = ({ productId, variationId }: Props) => {
   }, [images]);
 
   const click = useCallback(() => {
-    navigate(Product.route.replace(':id', `${product?.id}`));
-  }, [product?.id]);
+    navigate(
+      Product.route
+        .replace(':productId', `${product?.id}`)
+        .replace(':variationId', `${variation?.id}`),
+    );
+  }, [product?.id, variation?.id]);
 
   return (
     <Wrapper onClick={click}>

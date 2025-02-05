@@ -27,7 +27,7 @@ class Variation extends Model {
     Variation: ModelType<Variation>,
   ) {
     switch (type) {
-      case variationActionType.set: {
+      case variationActionType.upsert: {
         const variations = payload;
 
         if (!variations.length) {

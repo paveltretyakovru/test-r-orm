@@ -6,25 +6,31 @@
 import { Col, Row } from 'react-grid-system';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
+import { Button } from '../../lib/ui/button';
 import { Skeleton } from '../../lib/ui/skeleton';
 import { SlideShow } from './components/slideshow';
 import { useProduct } from './use-product';
-import { useEffect } from 'react';
 
-interface Props {}
+export function Product() {
+  const { productId, variationId } = useParams();
+  const { product, loading, imagesLoading, variation } = useProduct(
+    Number(productId),
+    Number(variationId),
+  );
 
-export function Product(props: Props) {
-  const { id } = useParams();
-  const { product, loading, imagesLoading } = useProduct(Number(id));
+  // useEffect(() => {
+  //   console.log('VARIATION UPDATED', variation);
+  // }, [variation]);
 
   return (
-    (!loading && !imagesLoading && product && (
+    (!loading && !imagesLoading && product && variation && (
       <>
         <Row>
           <Col md={12}>
             <Title className="xs:text-center">{product.name}</Title>
           </Col>
         </Row>
+
         <Row>
           <Col md={4}>
             <SlideShow images={product.images.toModelArray()} />
@@ -32,9 +38,10 @@ export function Product(props: Props) {
           <Col md={8}>
             <Info>
               <Price>
-                <PriceValue>{(product as any).variation?.value}</PriceValue>
+                <PriceValue>{variation.price}₽</PriceValue>
                 <PriceFor>за шт.</PriceFor>
               </Price>
+              <Button>В корзину за {variation.price}₽</Button>
             </Info>
           </Col>
         </Row>
@@ -43,7 +50,7 @@ export function Product(props: Props) {
   );
 }
 
-Product.route = '/product/:id';
+Product.route = '/product/:productId/:variationId';
 
 const Price = styled.div`
   display: flex;
