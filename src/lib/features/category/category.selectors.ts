@@ -4,7 +4,6 @@
  */
 import { createSelector } from 'redux-orm';
 import { orm } from '../../orm';
-import { CategoryInterface } from './category.types';
 
 export const selectCategories = createSelector(orm, (session) =>
   session.Category.all().toModelArray(),

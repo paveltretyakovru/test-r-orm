@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { Skeleton } from '../../../../lib/ui/skeleton';
 import { ProductCard } from './product-card';
 import { useProductList } from './use-product-list';
-import objectHash from 'object-hash';
 
 export function ProductsList() {
   const { loading, filteredProducts } = useProductList();
@@ -14,8 +13,12 @@ export function ProductsList() {
   return (
     <Wrapper>
       {(filteredProducts.length &&
-        filteredProducts.map((product) => (
-          <ProductCard key={objectHash(product.ref)} productId={product.id} />
+        filteredProducts.map((product, index) => (
+          <ProductCard
+            key={`${product.model.id}-${index}`}
+            productId={product.model.id}
+            variationId={product.variation?.id || null}
+          />
         ))) ||
         (loading && <ProductsSkeleton />) || (
           <NoProducts>Для данной категории товары не найдены</NoProducts>

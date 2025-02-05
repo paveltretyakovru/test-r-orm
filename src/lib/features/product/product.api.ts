@@ -47,22 +47,17 @@ export const getProductById = (id: number): Promise<ProductResponse> =>
 
 export const getProductsOfCategory = (
   categoriesIds: CategoryInterface['id'][],
-): Promise<ProductsResponse> =>
-  new Promise((resolve, reject) => {
-    let filters = '&filter={"category_id":[';
-    categoriesIds.forEach(
-      (categoryId, index) =>
-        (index !== categoriesIds.length - 1 && (filters += `${categoryId},`)) ||
-        (filters += `${categoryId}`),
-    );
-    filters += ']}';
+): Promise<ProductsResponse> => {
+  let filters = '&filter={"category_id":[';
+  categoriesIds.forEach(
+    (categoryId, index) =>
+      (index !== categoriesIds.length - 1 && (filters += `${categoryId},`)) ||
+      (filters += `${categoryId}`),
+  );
+  filters += ']}';
 
-    setTimeout(() => {
-      resolve(
-        api.get<ProductsResponse>(
-          `/api/Products?sort=["name","ASC"]${filters}`,
-          // `/api/Products?sort=["name","ASC"]&range=[0,19]&filter={"category_id":${categoryId}}`,
-        ),
-      );
-    }, 300);
-  });
+  return api.get<ProductsResponse>(
+    `/api/Products?sort=["name","ASC"]${filters}`,
+    // `/api/Products?sort=["name","ASC"]&range=[0,19]&filter={"category_id":${categoryId}}`,
+  );
+};

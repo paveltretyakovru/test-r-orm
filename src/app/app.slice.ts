@@ -13,7 +13,7 @@ interface InitialState {
 
 const initialState: InitialState = {
   loading: false,
-  activeCategory: null,
+  activeCategory: 1,
 };
 
 export const appSlice = createSlice({

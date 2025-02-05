@@ -21,34 +21,68 @@ import { selectVariations } from '../../../../lib/features/variation/variation.s
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
 import { selectActiveCategory } from '../../../app.selectors';
 import { selectImages } from '../../../../lib/features/image/image.selectors';
+import { SessionBoundModel } from 'redux-orm';
+import Product from '../../../../lib/features/product/product.model';
+import { ProductSchema } from '../../../../lib/features/product/product.types';
+import Variation from '../../../../lib/features/variation/variation.model';
 
 export const useProductList = () => {
   const dispatch = useAppDispatch();
-  const images = useSelector(selectImages);
   const products = useSelector(selectProducts);
   const variations = useSelector(selectVariations);
-  const categoryId = useAppSelector(selectActiveCategory);
+  const activeCategory = useAppSelector(selectActiveCategory);
   const categories = useSelector(selectCategories);
 
   const filteredProducts = useMemo(() => {
+    const result: {
+      model: SessionBoundModel<Product, {}>;
+      variation: SessionBoundModel<Variation, {}> | null;
+    }[] = [];
+
     const currentCategory = categories.find(
-      (category) => category.getId() === categoryId,
+      (category) => category.getId() === activeCategory,
     );
 
-    // Собираем дерево дочерних категорий выбранной категории
-    const childCategories: CategoryInterface[] =
-      currentCategory?.ref?.childCategories;
+    // Возвожно, категории еще не подгрузились
+    if (categories.length && variations.length) {
+      // Собираем дерево дочерних категорий выбранной категории
+      const childCategories: CategoryInterface[] =
+        currentCategory?.ref?.childCategories;
 
-    if (childCategories) {
-      const result = products.filter((product) =>
-        childCategories.some((c) => c.id === product.ref.categoryId),
-      );
+      if (childCategories) {
+        // Фильтруем товары по категории
+        const filtered = products.filter((product) =>
+          childCategories.some((c) => c.id === product.ref.categoryId),
+        );
 
-      return result;
+        // Заполняем результат учитывая вариации товаров
+        filtered.forEach((product) => {
+          const productVariatons: SessionBoundModel<Variation, {}>[] =
+            product.variations.toModelArray();
+
+          console.log('Product variations', productVariatons);
+
+          if (productVariatons.length) {
+            productVariatons.forEach((variation) => {
+              result.push({
+                model: product,
+                variation,
+              });
+            });
+          } else {
+            result.push({
+              model: product,
+              variation: null,
+            });
+          }
+        });
+      }
     }
 
-    return products;
-  }, [products, categoryId, categories, images]);
+    console.log('RESULT', result);
+
+    return result;
+  }, [products, activeCategory, categories, variations]);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -56,11 +90,11 @@ export const useProductList = () => {
   useEffect(() => {
     setLoading(true);
 
-    if (categoryId) {
-      const category = categories.find((c) => c.ref.id === categoryId);
+    if (activeCategory && categories.length) {
+      const category = categories.find((c) => c.ref.id === activeCategory);
 
       getProductsOfCategory(
-        category?.ref.childCategories.map((c: CategoryInterface) => c.id) || 0,
+        category?.ref.childCategories.map((c: CategoryInterface) => c.id) || 1,
       )
         .then((response) => {
           dispatch(upsertProducts(response));
@@ -73,38 +107,22 @@ export const useProductList = () => {
         })
         .catch()
         .finally(() => setLoading(false));
-    } else {
-      console.log('VARIATIONS', variations);
-
-      getProducts()
-        .then(async (response) => {
-          dispatch(upsertProducts(response));
-
-          try {
-            const images = await getProductsImages(
-              response.map((product) => product.id),
-            );
-
-            console.log('Uploaded images', { images, response });
-            dispatch(upsertImages(images));
-          } catch (e) {
-            toast.error('Произошла ошибка во время загрузки изображений');
-          }
-        })
-        .catch()
-        .finally(() => setLoading(false));
     }
-  }, [categoryId]);
+  }, [activeCategory, categories, variations]);
 
   // Подтягиваем зависимости
   useEffect(() => {
-    if (products.length) {
-      getVariations()
-        .then((response) => dispatch(setVariations(response)))
-        .then(() => setLoading(false))
-        .catch();
-    }
-  }, [products]);
+    getVariations()
+      .then((response) => dispatch(setVariations(response)))
+      .then(() => setLoading(false))
+      .catch();
+  }, [products, activeCategory]);
 
-  return { loading, products, categoryId, filteredProducts, variations };
+  return {
+    loading,
+    products,
+    activeCategory,
+    filteredProducts,
+    variations,
+  };
 };

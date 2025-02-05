@@ -7,8 +7,4 @@ import api from '../../api.service';
 import { VariationsResponse } from './variation.types';
 
 export const getVariations = (): Promise<VariationsResponse> =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(api.get<VariationsResponse>('/api/ProductVariations'));
-    }, 300);
-  });
+  api.get<VariationsResponse>('/api/ProductVariations?range=[0,1000]');

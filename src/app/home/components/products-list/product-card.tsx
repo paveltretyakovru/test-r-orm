@@ -8,25 +8,27 @@ import styled from 'styled-components';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { QuerySet, SessionBoundModel } from 'redux-orm';
 import notFoundImageUrl from '../../../../lib/assets/no-image.jpg';
 import { selectImages } from '../../../../lib/features/image/image.selectors';
-import ProductModel from '../../../../lib/features/product/product.model';
-import { Button } from '../../../../lib/ui/button';
-import { Product } from '../../../product/product.page';
-import { session } from '../../../../lib/store';
 import { selectProduct } from '../../../../lib/features/product/product.selectors';
 import { ProductSchema } from '../../../../lib/features/product/product.types';
+import { Button } from '../../../../lib/ui/button';
+import { Product } from '../../../product/product.page';
+import { VariationSchema } from '../../../../lib/features/variation/variation.types';
+import { selectVariationById } from '../../../../lib/features/variation/variation.selectors';
 
 interface Props {
   productId: ProductSchema['id'];
+  variationId: VariationSchema['id'] | null;
 }
 
-export const ProductCard = ({ productId }: Props) => {
+export const ProductCard = ({ productId, variationId }: Props) => {
   const navigate = useNavigate();
   const images = useSelector(selectImages);
   const [imageUrl, setImageUrl] = useState<string>(notFoundImageUrl);
   const product = useSelector(selectProduct(productId));
+
+  const variation = useSelector(selectVariationById(variationId));
 
   useEffect(() => {
     if (product) {
@@ -35,6 +37,8 @@ export const ProductCard = ({ productId }: Props) => {
       if (images.length) {
         setImageUrl(images[0].imageUrl);
       }
+
+      // console.log('Product variations', product.variations.toModelArray());
     } else {
       setImageUrl(notFoundImageUrl);
     }
@@ -49,15 +53,15 @@ export const ProductCard = ({ productId }: Props) => {
       <Image image={imageUrl} />
       <Name>{product?.name}</Name>
 
-      {(product?.variation && (
-        <Price>от {product?.variation.price} ₽</Price>
-      )) || <NoPrice>Цена не указана</NoPrice>}
+      {(variation && <Price>от {variation.price} ₽</Price>) || (
+        <NoPrice>Цена не указана</NoPrice>
+      )}
 
-      {product?.variation && (
+      {variation && (
         <>
           <Discount>
             <span className="old-price">
-              {(product?.variation.price * (1 - 0.1)).toFixed(2)} ₽
+              {(variation.price * (1 - 0.1)).toFixed(2)} ₽
             </span>{' '}
             <span className="discount-value">-10%</span>
           </Discount>
