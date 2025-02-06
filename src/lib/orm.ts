@@ -7,12 +7,14 @@ import Category from './features/category/category.model';
 import Product from './features/product/product.model';
 import Variation from './features/variation/variation.model';
 import Image from './features/image/image.model';
+import { VariationProperty } from './features/variation-property/variation-property.model';
 
 const schema = {
   Image,
   Product,
   Category,
   Variation,
+  VariationProperty,
 };
 
 export type Schema = typeof schema;
@@ -21,6 +23,6 @@ export const orm: ORM<Schema> = new ORM<Schema>({
   stateSelector: (state) => state.orm,
 });
 
-orm.register(Category, Product, Variation, Image);
+orm.register(Category, Product, Variation, Image, VariationProperty);
 
 export const ormReducer = createReducer(orm);
