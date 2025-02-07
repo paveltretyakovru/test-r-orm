@@ -8,17 +8,13 @@ import { ProductCard } from './product-card';
 import { useProductList } from './use-product-list';
 
 export function ProductsList() {
-  const { loading, filteredProducts } = useProductList();
+  const { loading, products } = useProductList();
 
   return (
     <Wrapper>
-      {(filteredProducts.length &&
-        filteredProducts.map((product, index) => (
-          <ProductCard
-            key={`${product.model.id}-${index}`}
-            productId={product.model.id}
-            variationId={product.variation?.id || null}
-          />
+      {(products.length &&
+        products.map((product, index) => (
+          <ProductCard key={`${product.id}`} product={product} />
         ))) ||
         (loading && <ProductsSkeleton />) || (
           <NoProducts>Для данной категории товары не найдены</NoProducts>

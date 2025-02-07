@@ -6,7 +6,8 @@
 import { ErrorResponse } from 'react-router';
 import api from '../../api.service';
 import { ProductResponse, ProductsResponse } from './product.types';
-import { CategoryInterface } from '../category/category.types';
+import { CategoryModels, CategorySchema } from '../category/category.types';
+import { toast } from 'react-toastify';
 
 export const getProducts = (): Promise<ProductsResponse> =>
   new Promise((resolve, reject) => {
@@ -45,19 +46,24 @@ export const getProductById = (id: number): Promise<ProductResponse> =>
     }
   });
 
-export const getProductsOfCategory = (
-  categoriesIds: CategoryInterface['id'][],
+export const getProductsOfCategories = async (
+  categoriesIds: CategorySchema['id'][],
 ): Promise<ProductsResponse> => {
-  let filters = '&filter={"category_id":[';
-  categoriesIds.forEach(
-    (categoryId, index) =>
-      (index !== categoriesIds.length - 1 && (filters += `${categoryId},`)) ||
-      (filters += `${categoryId}`),
-  );
-  filters += ']}';
+  const products: ProductsResponse = [];
 
-  return api.get<ProductsResponse>(
-    `/api/Products?sort=["name","ASC"]${filters}`,
-    // `/api/Products?sort=["name","ASC"]&range=[0,19]&filter={"category_id":${categoryId}}`,
-  );
+  try {
+    const response = await api.get<ProductsResponse>(
+      `/api/Products?sort=["name","ASC"]&filter={${categoriesIds.join(',')}}`,
+    );
+
+    products.push(...response);
+  } catch (e) {
+    if (e instanceof Error) {
+      toast.error(
+        `Произошла ошибка во время загрузки изображений: ${e.message}`,
+      );
+    }
+  }
+
+  return products;
 };

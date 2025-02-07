@@ -4,11 +4,11 @@
  */
 import { SessionBoundModel } from 'redux-orm';
 import Category from './category.model';
-import { CategoryInterface } from './category.types';
+import { CategorySchema } from './category.types';
 
 export function collectCategoriesTree(
   categories: readonly SessionBoundModel<Category, {}>[],
-  rootNodeId: CategoryInterface['id'],
+  rootNodeId: CategorySchema['id'],
 ): SessionBoundModel<Category, {}>[] {
   const root = categories.find((category) => category.getId() === rootNodeId);
 

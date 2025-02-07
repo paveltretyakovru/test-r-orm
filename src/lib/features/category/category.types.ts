@@ -3,11 +3,16 @@
  *   All rights reserved.
  */
 
-export interface CategoryInterface {
+import { SessionBoundModel } from 'redux-orm';
+import Category from './category.model';
+
+export type CategoryModels = SessionBoundModel<Category, {}>[];
+
+export interface CategorySchema {
   id: number;
   name: string;
   parentId: number;
-  childCategories?: CategoryInterface[];
+  childCategories?: CategorySchema[];
 }
 
 export interface CategoryResponse {

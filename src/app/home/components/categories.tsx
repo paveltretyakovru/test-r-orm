@@ -11,7 +11,7 @@ import { Skeleton } from '../../../lib/ui/skeleton';
 import { Tag } from '../../../lib/ui/tag';
 import { selectActiveCategory } from '../../app.selectors';
 import { useCallback } from 'react';
-import { CategoryInterface } from '../../../lib/features/category/category.types';
+import { CategorySchema } from '../../../lib/features/category/category.types';
 import { actions } from '../../app.slice';
 
 export function Categories() {
@@ -19,8 +19,8 @@ export function Categories() {
   const activeCategory = useAppSelector(selectActiveCategory);
   const { categories, loading } = useCategories();
 
-  const click = useCallback((categoryId: CategoryInterface['id']) => {
-    dispatch(actions.setActiveCstegory(categoryId));
+  const click = useCallback((categoryId: CategorySchema['id']) => {
+    dispatch(actions.setActiveCategory(categoryId));
   }, []);
 
   return (

@@ -4,7 +4,8 @@
  */
 import { createSelector } from 'redux-orm';
 import { orm } from '../../orm';
-import { ProductResponse, ProductSchema } from './product.types';
+import { ProductModels, ProductResponse, ProductSchema } from './product.types';
+import { CategoryModels } from '../category/category.types';
 
 export const selectProduct = (id: number) => {
   return createSelector(orm, (session) => {
@@ -12,9 +13,32 @@ export const selectProduct = (id: number) => {
   });
 };
 
-export const selectProducts = createSelector(orm, (session) =>
-  session.Product.all().toModelArray(),
+export const selectProducts = createSelector(
+  orm,
+  (session) => session.Product.all().toModelArray() as ProductModels,
 );
+
+export const selectProductsRefs = createSelector(orm, (session) =>
+  session.Product.all().toRefArray(),
+);
+
+export const selectProdcutByCategories = (activeCategories: CategoryModels) => {
+  return createSelector(orm, (session) => {
+    const products: ProductModels = [];
+
+    activeCategories.forEach((category) => {
+      const findProducts = (
+        session.Product.all().toModelArray() as ProductModels
+      ).filter((p) => p.categoryId === category.id);
+
+      if (findProducts) {
+        products.push(...findProducts);
+      }
+    });
+
+    return products;
+  });
+};
 
 export const selectCategoryProduct = (
   categoryId: ProductResponse['category_id'],

@@ -2,8 +2,9 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
+import { toast } from 'react-toastify';
 import api from '../../api.service';
-import { ProductSchema } from '../product/product.types';
+import { ProductModels, ProductSchema } from '../product/product.types';
 import { ImagesResponse } from './image.types';
 
 export const getProductsImages = (
@@ -36,3 +37,34 @@ export const getImagesByProductId = (
 
     resolve(response);
   });
+
+export async function fetchProductsImages(
+  productsIds: ProductSchema['id'][],
+): Promise<ImagesResponse> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ids = productsIds.join(',');
+
+      const response = await api.get<ImagesResponse>(
+        `/api/ProductImages?filter={"product_id":[${ids}]}&range=[0,1000]`,
+      );
+
+      resolve(response);
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(
+          `Ошибка во время загрузки изображений продуктов. ${e.message}`,
+        );
+        console.error(
+          `Ошибка во время загрузки изображений продуктов. ${e.message}`,
+          e,
+        );
+      } else {
+        toast.error(`Ошибка во время загрузки изображений продуктов`);
+        console.error(`Ошибка во время загрузки изображений продуктов`, e);
+      }
+
+      reject([]);
+    }
+  });
+}

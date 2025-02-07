@@ -5,30 +5,32 @@
 
 import styled from 'styled-components';
 
-import { useCallback, useEffect, useState } from 'react';
+import { Button } from '../../../../lib/ui/button';
+import { Product } from '../../../product/product.page';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import notFoundImageUrl from '../../../../lib/assets/no-image.jpg';
 import { selectImages } from '../../../../lib/features/image/image.selectors';
 import { selectProduct } from '../../../../lib/features/product/product.selectors';
-import { ProductSchema } from '../../../../lib/features/product/product.types';
-import { Button } from '../../../../lib/ui/button';
-import { Product } from '../../../product/product.page';
-import { VariationSchema } from '../../../../lib/features/variation/variation.types';
+import {
+  ProductModel,
+  ProductSchema,
+} from '../../../../lib/features/product/product.types';
+import {
+  VariationModel,
+  VariationSchema,
+} from '../../../../lib/features/variation/variation.types';
 import { selectVariationById } from '../../../../lib/features/variation/variation.selectors';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Props {
-  productId: ProductSchema['id'];
-  variationId: VariationSchema['id'] | null;
+  product: ProductModel;
 }
 
-export const ProductCard = ({ productId, variationId }: Props) => {
+export const ProductCard = ({ product }: Props) => {
   const navigate = useNavigate();
-  const images = useSelector(selectImages);
   const [imageUrl, setImageUrl] = useState<string>(notFoundImageUrl);
-  const product = useSelector(selectProduct(productId));
-
-  const variation = useSelector(selectVariationById(variationId));
+  const [variation, setVariation] = useState<VariationModel>();
 
   useEffect(() => {
     if (product) {
@@ -37,25 +39,27 @@ export const ProductCard = ({ productId, variationId }: Props) => {
       if (images.length) {
         setImageUrl(images[0].imageUrl);
       }
-
-      // console.log('Product variations', product.variations.toModelArray());
     } else {
       setImageUrl(notFoundImageUrl);
     }
-  }, [images]);
+  }, [product]);
+
+  useEffect(() => {
+    // console.log('Updated variation', product.variations.toRefArray());
+  }, [product.variations]);
 
   const click = useCallback(() => {
     navigate(
       Product.route
-        .replace(':productId', `${product?.id}`)
+        .replace(':productId', `${product.id}`)
         .replace(':variationId', `${variation?.id}`),
     );
-  }, [product?.id, variation?.id]);
+  }, [product.id, variation?.id]);
 
   return (
     <Wrapper onClick={click}>
       <Image image={imageUrl} />
-      <Name>{product?.name}</Name>
+      <Name>{product.name}</Name>
 
       {(variation && <Price>от {variation.price} ₽</Price>) || (
         <NoPrice>Цена не указана</NoPrice>

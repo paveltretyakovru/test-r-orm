@@ -2,8 +2,13 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import { ImageSchema } from '../image/image.types';
-import { VariationSchema } from '../variation/variation.types';
+import { QuerySet, SessionBoundModel } from 'redux-orm';
+import { VariationModels, VariationSchema } from '../variation/variation.types';
+import Product from './product.model';
+import Variation from '../variation/variation.model';
+
+export type ProductModel = SessionBoundModel<Product, ProductSchema>;
+export type ProductModels = SessionBoundModel<Product, ProductSchema>[];
 
 export interface ProductSchema {
   id: number;
@@ -12,7 +17,7 @@ export interface ProductSchema {
   description: string;
 
   images: any;
-  variation: VariationSchema;
+  variations: QuerySet<Variation>;
 }
 
 export interface ProductResponse {

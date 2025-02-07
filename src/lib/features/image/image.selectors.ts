@@ -4,6 +4,8 @@
  */
 import { createSelector } from 'redux-orm';
 import { orm } from '../../orm';
+import { ProductModels } from '../product/product.types';
+import { ImageModels } from './image.types';
 
 export const selectImages = createSelector(orm, (session) =>
   session.Image.all().toModelArray(),

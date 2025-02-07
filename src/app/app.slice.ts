@@ -4,11 +4,11 @@
  */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CategoryInterface } from '../lib/features/category/category.types';
+import { CategorySchema } from '../lib/features/category/category.types';
 
 interface InitialState {
   loading: boolean;
-  activeCategory: CategoryInterface['id'] | null;
+  activeCategory: CategorySchema['id'];
 }
 
 const initialState: InitialState = {
@@ -24,9 +24,8 @@ export const appSlice = createSlice({
       state.loading = action.payload;
     },
 
-    setActiveCstegory(state, action: PayloadAction<CategoryInterface['id']>) {
-      state.activeCategory =
-        action.payload === state.activeCategory ? null : action.payload;
+    setActiveCategory(state, action: PayloadAction<CategorySchema['id']>) {
+      state.activeCategory = action.payload;
     },
   },
 });
