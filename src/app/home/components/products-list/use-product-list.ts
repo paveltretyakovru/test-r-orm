@@ -14,6 +14,8 @@ import { collectCategoriesTree } from '../../../../lib/features/category/categor
 import { getProductsOfCategories } from '../../../../lib/features/product/product.api';
 import { selectProdcutByCategories } from '../../../../lib/features/product/product.selectors';
 import { useAppDispatch, useAppSelector } from '../../../../lib/hooks';
+import { upsertVariations } from '../../../../lib/features/variation/variation.actions';
+import { fetchVariationsByProductIds } from '../../../../lib/features/variation/variation.api';
 
 export const useProductList = () => {
   const dispatch = useAppDispatch();
@@ -36,17 +38,22 @@ export const useProductList = () => {
     if (activeCategories.length) {
       // Загружаем товары активной категории
       getProductsOfCategories(activeCategories.map((ac) => ac.id))
+        .then((products) => dispatch(upsertProducts(products)) && products)
+        // Загружаем вариации товаров
         .then(
-          (responseProducts) =>
-            dispatch(upsertProducts(responseProducts)) && responseProducts,
+          async (products) =>
+            dispatch(
+              upsertVariations(
+                await fetchVariationsByProductIds(products.map((p) => p.id)),
+              ),
+            ) && products,
         )
         // Загружаем изображения полученых товаров
-        .then(async (responseProducts) => {
-          const responseImages = await fetchProductsImages(
-            responseProducts.map((p) => p.id),
-          );
-          dispatch(upsertImages(responseImages));
-        })
+        .then(async (products) =>
+          dispatch(
+            upsertImages(await fetchProductsImages(products.map((p) => p.id))),
+          ),
+        )
         .finally(() => setLoading(false));
     }
   }, [activeCategories]);

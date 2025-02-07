@@ -11,7 +11,7 @@ import { upsertProducts } from '../../lib/features/product/product.actions';
 import { getProductById } from '../../lib/features/product/product.api';
 import { selectProduct } from '../../lib/features/product/product.selectors';
 import { upsertVariations } from '../../lib/features/variation/variation.actions';
-import { getVariationsByProductId } from '../../lib/features/variation/variation.api';
+import { fetchVariationsByProductIds } from '../../lib/features/variation/variation.api';
 import { selectVariationById } from '../../lib/features/variation/variation.selectors';
 import { useAppDispatch } from '../../lib/hooks';
 
@@ -40,7 +40,7 @@ export function useProduct(productId: number, variationId: number) {
     }
 
     async function getVariant() {
-      const variantResponse = await getVariationsByProductId([productId]);
+      const variantResponse = await fetchVariationsByProductIds([productId]);
 
       dispatch(upsertVariations(variantResponse));
     }

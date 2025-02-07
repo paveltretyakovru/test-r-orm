@@ -13,15 +13,6 @@ export const selectProduct = (id: number) => {
   });
 };
 
-export const selectProducts = createSelector(
-  orm,
-  (session) => session.Product.all().toModelArray() as ProductModels,
-);
-
-export const selectProductsRefs = createSelector(orm, (session) =>
-  session.Product.all().toRefArray(),
-);
-
 export const selectProdcutByCategories = (activeCategories: CategoryModels) => {
   return createSelector(orm, (session) => {
     const products: ProductModels = [];
@@ -39,7 +30,3 @@ export const selectProdcutByCategories = (activeCategories: CategoryModels) => {
     return products;
   });
 };
-
-export const selectCategoryProduct = (
-  categoryId: ProductResponse['category_id'],
-) => {};

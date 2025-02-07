@@ -31,7 +31,7 @@ class Variation extends Model {
         const variations = payload;
 
         if (!variations.length) {
-          console.warn('Unable to create products');
+          console.warn('Unable to create variation');
         } else {
           variations.forEach((responseVariation) => {
             const { product_id: productId, ...clear } = responseVariation;

@@ -53,7 +53,7 @@ export const getProductsOfCategories = async (
 
   try {
     const response = await api.get<ProductsResponse>(
-      `/api/Products?sort=["name","ASC"]&filter={${categoriesIds.join(',')}}`,
+      `/api/Products?sort=["name","ASC"]&filter={"category_id":[${categoriesIds.join(',')}]}`,
     );
 
     products.push(...response);

@@ -18,6 +18,7 @@ import {
 } from '../../../../lib/features/product/product.types';
 import {
   VariationModel,
+  VariationModels,
   VariationSchema,
 } from '../../../../lib/features/variation/variation.types';
 import { selectVariationById } from '../../../../lib/features/variation/variation.selectors';
@@ -45,8 +46,16 @@ export const ProductCard = ({ product }: Props) => {
   }, [product]);
 
   useEffect(() => {
-    // console.log('Updated variation', product.variations.toRefArray());
-  }, [product.variations]);
+    console.log('Updated product variations');
+    const variations = product.variations
+      .all()
+      .toModelArray() as VariationModels;
+
+    if (variations.length) {
+      const first = variations.sort((a, b) => a.ref.price - b.ref.price)[0];
+      setVariation(first);
+    }
+  }, [product]);
 
   const click = useCallback(() => {
     navigate(
