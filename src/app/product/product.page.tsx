@@ -18,10 +18,6 @@ export function Product() {
     Number(variationId),
   );
 
-  // useEffect(() => {
-  //   console.log('VARIATION UPDATED', variation);
-  // }, [variation]);
-
   return (
     (!loading && !imagesLoading && product && variation && (
       <>

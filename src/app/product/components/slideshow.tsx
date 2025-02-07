@@ -94,8 +94,10 @@ const Arrow = styled.div`
 `;
 
 const Big = styled.div`
+  /* min-height: 360px; */
+
   img {
-    max-height: 400px;
+    max-height: 350px;
     margin: auto;
     margin-bottom: 10px;
   }
