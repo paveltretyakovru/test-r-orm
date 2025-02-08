@@ -9,7 +9,7 @@ export enum VariantProprtyType {
   list = 3,
 }
 
-export interface VariationPropertyTypeSchema {
+export interface VariationPropertySchema {
   id: number;
   type: VariantProprtyType;
   name: number;

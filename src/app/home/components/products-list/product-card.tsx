@@ -59,7 +59,7 @@ export const ProductCard = ({ product }: Props) => {
 
   const click = useCallback(() => {
     navigate(
-      Product.route
+      Product.variationRoute
         .replace(':productId', `${product.id}`)
         .replace(':variationId', `${variation?.id}`),
     );

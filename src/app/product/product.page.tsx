@@ -10,6 +10,7 @@ import { Button } from '../../lib/ui/button';
 import { Skeleton } from '../../lib/ui/skeleton';
 import { SlideShow } from './components/slideshow';
 import { useProduct } from './use-product';
+import { useEffect } from 'react';
 
 export function Product() {
   const { productId, variationId } = useParams();
@@ -17,6 +18,15 @@ export function Product() {
     Number(productId),
     Number(variationId),
   );
+
+  useEffect(() => {
+    console.log('Current variation', {
+      variation,
+      loading,
+      imagesLoading,
+      product,
+    });
+  }, [variation]);
 
   return (
     (!loading && !imagesLoading && product && variation && (
@@ -46,7 +56,8 @@ export function Product() {
   );
 }
 
-Product.route = '/product/:productId/:variationId';
+Product.route = '/product/:productId';
+Product.variationRoute = '/product/:productId/:variationId';
 
 const Price = styled.div`
   display: flex;

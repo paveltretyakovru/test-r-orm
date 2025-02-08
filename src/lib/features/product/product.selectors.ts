@@ -4,12 +4,17 @@
  */
 import { createSelector } from 'redux-orm';
 import { orm } from '../../orm';
-import { ProductModels, ProductResponse, ProductSchema } from './product.types';
+import {
+  ProductModel,
+  ProductModels,
+  ProductResponse,
+  ProductSchema,
+} from './product.types';
 import { CategoryModels } from '../category/category.types';
 
 export const selectProduct = (id: number) => {
   return createSelector(orm, (session) => {
-    return session.Product.withId(id);
+    return session.Product.withId(id) as ProductModel | null;
   });
 };
 

@@ -2,21 +2,70 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import Model, { attr, FieldSpecMap } from 'redux-orm';
+import { PayloadAction } from '@reduxjs/toolkit';
+import Model, { attr, FieldSpecMap, fk, ModelType } from 'redux-orm';
+import { VariationPropertyValueActionType } from './variation-property-value.actions';
+import { VariationPropertyValueResponses } from './variation-property-value.types';
 
 export class VariationPropertyValue extends Model {
   static modelName: string = 'VariationPropertyValue';
 
   static fields: FieldSpecMap = {
     // product_variation_id
-    productVariationId: attr(),
+    productVariationId: fk({
+      to: 'Variation',
+      as: 'productVariationId',
+      relatedName: 'propertyValues',
+    }),
 
     // product_variation_property_id
     productVariationPropertyId: attr(),
 
-    valueString: attr(),
     valueInt: attr(),
     valueFloat: attr(),
+    valueString: attr(),
+
+    // product_variation_property_list_value_id
     productVariationPropertyListValueId: attr(),
   };
+
+  static reducer(
+    { type, payload }: PayloadAction<unknown>,
+    model: ModelType<VariationPropertyValue>,
+  ): void {
+    switch (type) {
+      case VariationPropertyValueActionType.upsert: {
+        if (payload as VariationPropertyValueResponses) {
+          (payload as VariationPropertyValueResponses).forEach((v) => {
+            const {
+              value_int: valueInt,
+              value_float: valueFloat,
+              value_string: valueString,
+              product_variation_id: productVariationId,
+              product_variation_property_id: productVariationPropertyId,
+              product_variation_property_list_value_id:
+                productVariationPropertyListValueId,
+              ...exclude
+            } = v;
+
+            model.upsert({
+              ...exclude,
+              valueInt,
+              valueFloat,
+              valueString,
+              productVariationId,
+              productVariationPropertyId,
+              productVariationPropertyListValueId,
+            });
+          });
+        } else {
+          console.error('Error type of payload');
+        }
+        break;
+      }
+
+      default:
+        break;
+    }
+  }
 }
