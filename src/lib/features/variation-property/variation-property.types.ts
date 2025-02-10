@@ -21,4 +21,4 @@ export interface VariationPropertyResponse {
   name: number;
 }
 
-export type VariationPropertiesResponse = VariationPropertiesResponse[];
+export type VariationPropertiesResponse = VariationPropertyResponse[];

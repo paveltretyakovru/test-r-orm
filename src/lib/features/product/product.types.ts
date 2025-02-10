@@ -17,7 +17,7 @@ export interface ProductSchema {
   description: string;
 
   images: any;
-  variations: QuerySet<Variation>;
+  variations: QuerySet<Variation, VariationSchema>;
 }
 
 export interface ProductResponse {

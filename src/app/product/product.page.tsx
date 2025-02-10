@@ -3,30 +3,122 @@
  *   All rights reserved.
  */
 
+import { useCallback, useEffect, useMemo } from 'react';
 import { Col, Row } from 'react-grid-system';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
+import { VariationPropertySchema } from '../../lib/features/variation-property/variation-property.types';
+import { VariationSchema } from '../../lib/features/variation/variation.types';
 import { Button } from '../../lib/ui/button';
 import { Skeleton } from '../../lib/ui/skeleton';
 import { SlideShow } from './components/slideshow';
 import { useProduct } from './use-product';
-import { useEffect } from 'react';
 
 export function Product() {
+  const navigate = useNavigate();
   const { productId, variationId } = useParams();
-  const { product, loading, imagesLoading, variation } = useProduct(
+  const { product, loading, imagesLoading, variation, variations } = useProduct(
     Number(productId),
     Number(variationId),
   );
 
-  useEffect(() => {
-    console.log('Current variation', {
-      variation,
-      loading,
-      imagesLoading,
-      product,
-    });
-  }, [variation]);
+  // useEffect(() => {
+  //   console.log('VARIATION UPDATED', variation);
+  // }, [variation]);
+
+  const navigateToVariant = useCallback(
+    (variationId: VariationSchema['id']) =>
+      navigate(
+        Product.variationRoute
+          .replace(':productId', `${product?.id || ''}`)
+          .replace(':variationId', `${variationId}`),
+      ),
+    [product, navigate],
+  );
+
+  // Группируем вариации товаров и их свойства
+  const collectedVariations = useMemo(() => {
+    const result: {
+      typeId: VariationPropertySchema['id'];
+      typeName: VariationPropertySchema['name'];
+      values: {
+        value: string | number | null;
+        variationId: VariationSchema['id'];
+      }[];
+    }[] = [];
+
+    if (variations) {
+      variations.forEach((variant) => {
+        const values = variant.values.toModelArray();
+
+        values.forEach((value) => {
+          const find = result.find((r) => r.typeId === value.type.id);
+
+          const resultValue =
+            value.value?.value ||
+            value.valueFloat ||
+            value.valueInt ||
+            value.valueString;
+
+          if (!find) {
+            result.push({
+              typeId: value.type.id,
+              typeName: value.type.name,
+              values: [
+                {
+                  value: resultValue,
+                  variationId: variant.id,
+                },
+              ],
+            });
+          } else {
+            find.values.push({
+              value: resultValue,
+              variationId: variant.id,
+            });
+          }
+        });
+      });
+    }
+
+    return result.map((res) => (
+      <Variations key={res.typeId}>
+        <VariationLabel>{res.typeName}</VariationLabel>
+        <VariationPropertyWrapper>
+          {(() => {
+            interface variantValueData {
+              value: string | number | null;
+              variationId: VariationSchema['id'];
+            }
+
+            const unic: variantValueData[] = [];
+
+            res.values.forEach((val) => {
+              const i = unic.findIndex((p) => p.value === val.value);
+
+              if (i !== -1 && val.variationId === Number(variationId)) {
+                unic[i] = val;
+              } else if (i === -1) {
+                unic.push(val);
+              }
+            });
+
+            return unic.map((u) => (
+              <VariantProperty
+                onClick={() => navigateToVariant(u.variationId)}
+                className={
+                  (`${u.variationId}` === `${variationId}` && 'active') || ''
+                }
+                key={u.variationId}
+              >
+                {u.value}
+              </VariantProperty>
+            ));
+          })()}
+        </VariationPropertyWrapper>
+      </Variations>
+    ));
+  }, [variations, variationId, productId, product]);
 
   return (
     (!loading && !imagesLoading && product && variation && (
@@ -47,6 +139,9 @@ export function Product() {
                 <PriceValue>{variation.price}₽</PriceValue>
                 <PriceFor>за шт.</PriceFor>
               </Price>
+
+              {collectedVariations}
+
               <Button>В корзину за {variation.price}₽</Button>
             </Info>
           </Col>
@@ -58,6 +153,39 @@ export function Product() {
 
 Product.route = '/product/:productId';
 Product.variationRoute = '/product/:productId/:variationId';
+
+const VariationPropertyWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+const VariantProperty = styled.div`
+  cursor: pointer;
+  border: 1px solid var(--variant-border);
+  padding: 10px;
+  border-radius: 56px;
+  max-width: max-content;
+  margin-right: 13px;
+
+  &.active {
+    color: var(--blue);
+    border: 1px solid var(--blue);
+  }
+`;
+
+const VariationLabel = styled.div`
+  font-family: Raleway;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22.4px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 10px;
+`;
+
+const Variations = styled.div`
+  margin: 16px 0;
+`;
 
 const Price = styled.div`
   display: flex;
@@ -86,6 +214,7 @@ const PriceFor = styled.div`
 const Info = styled.div`
   padding: 20px;
   border-radius: 20px;
+  margin-bottom: 20px;
   background-color: var(--gray-blue);
 `;
 

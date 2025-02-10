@@ -27,5 +27,5 @@ export interface VariationPropertyListValueResponse {
   product_variation_property_id: VariationPropertySchema['id'];
 }
 
-export type VariationPropertyListValueResponses =
+export type VariationPropertyListValuesResponse =
   VariationPropertyListValueResponse[];

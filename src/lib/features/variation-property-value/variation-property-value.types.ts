@@ -2,10 +2,13 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
+import { ModelType } from 'redux-orm/Model';
 import { VariationSchema } from '../variation/variation.types';
 import { SessionBoundModel } from 'redux-orm';
-import { VariationPropertyValue } from './variation-property-value.model';
+import { VariationProperty } from '../variation-property/variation-property.model';
 import { VariationPropertySchema } from '../variation-property/variation-property.types';
+import { VariationPropertyValue } from './variation-property-value.model';
+import { VariationPropertyListValue } from '../variation-property-list-value/variaton-property-list-value.model';
 import { VariationPropertyListValueShema } from '../variation-property-list-value/variation-property-list-value.types';
 
 export interface VariationPropertyValueSchema {
@@ -18,6 +21,13 @@ export interface VariationPropertyValueSchema {
   propertyId: VariationPropertySchema['id'];
   variationId: VariationSchema['id'];
   productVariationPropertyListValueId: VariationPropertyListValueShema['id'];
+
+  // Related fields
+  type: SessionBoundModel<VariationProperty, VariationPropertySchema>;
+  value: SessionBoundModel<
+    VariationPropertyListValue,
+    VariationPropertyListValueShema
+  >;
 }
 
 export type VariationPropertyValueModel = SessionBoundModel<

@@ -3,7 +3,7 @@
  *   All rights reserved.
  */
 import { PayloadAction } from '@reduxjs/toolkit';
-import Model, { attr, FieldSpecMap, fk, ModelType } from 'redux-orm';
+import Model, { attr, FieldSpecMap, fk, ModelType, oneToOne } from 'redux-orm';
 import { VariationPropertyValueActionType } from './variation-property-value.actions';
 import { VariationPropertyValueResponses } from './variation-property-value.types';
 
@@ -14,19 +14,27 @@ export class VariationPropertyValue extends Model {
     // product_variation_id
     productVariationId: fk({
       to: 'Variation',
-      as: 'productVariationId',
-      relatedName: 'propertyValues',
+      as: 'variaton',
+      relatedName: 'values',
     }),
 
     // product_variation_property_id
-    productVariationPropertyId: attr(),
+    productVariationPropertyId: oneToOne({
+      to: 'VariationProperty',
+      as: 'type',
+      relatedName: 'variationValue',
+    }),
+
+    // product_variation_property_list_value_id
+    productVariationPropertyListValueId: oneToOne({
+      to: 'VariationPropertyListValue',
+      as: 'value',
+      relatedName: 'listValue',
+    }),
 
     valueInt: attr(),
     valueFloat: attr(),
     valueString: attr(),
-
-    // product_variation_property_list_value_id
-    productVariationPropertyListValueId: attr(),
   };
 
   static reducer(

@@ -9,6 +9,7 @@ import Variation from './features/variation/variation.model';
 import Image from './features/image/image.model';
 import { VariationProperty } from './features/variation-property/variation-property.model';
 import { VariationPropertyValue } from './features/variation-property-value/variation-property-value.model';
+import { VariationPropertyListValue } from './features/variation-property-list-value/variaton-property-list-value.model';
 
 const schema = {
   Image,
@@ -17,6 +18,7 @@ const schema = {
   Variation,
   VariationProperty,
   VariationPropertyValue,
+  VariationPropertyListValue,
 };
 
 export type Schema = typeof schema;
@@ -32,6 +34,7 @@ orm.register(
   Variation,
   VariationProperty,
   VariationPropertyValue,
+  VariationPropertyListValue,
 );
 
 export const ormReducer = createReducer(orm);

@@ -20,6 +20,9 @@ export const ColorsGlobal = createGlobalStyle`
   --color-copyright: #8d8d8e;
   --gray-blue: #F0F4FB;
 
+  /* Ui */
+  --variant-border: #CECECE;
+
   /* Sizes */
   --footer-height: 215px;
 }
