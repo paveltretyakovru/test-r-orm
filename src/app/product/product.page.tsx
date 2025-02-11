@@ -3,7 +3,7 @@
  *   All rights reserved.
  */
 
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Col, Row } from 'react-grid-system';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
@@ -13,6 +13,7 @@ import { Button } from '../../lib/ui/button';
 import { Skeleton } from '../../lib/ui/skeleton';
 import { SlideShow } from './components/slideshow';
 import { useProduct } from './use-product';
+import { ImageModels } from '../../lib/features/image/image.types';
 
 export function Product() {
   const navigate = useNavigate();
@@ -23,8 +24,8 @@ export function Product() {
   );
 
   // useEffect(() => {
-  //   console.log('VARIATION UPDATED', variation);
-  // }, [variation]);
+  //   console.log('Variation id updated:', variationId);
+  // }, [variationId]);
 
   const navigateToVariant = useCallback(
     (variationId: VariationSchema['id']) =>
@@ -131,7 +132,7 @@ export function Product() {
 
         <Row>
           <Col md={4}>
-            <SlideShow images={product.images.toModelArray()} />
+            <SlideShow images={product.images.toModelArray() as ImageModels} />
           </Col>
           <Col md={8}>
             <Info>

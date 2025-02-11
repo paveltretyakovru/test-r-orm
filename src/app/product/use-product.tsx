@@ -36,19 +36,15 @@ export function useProduct(productId: number, variationId: number) {
   // Models
   const product = useSelector(selectProduct(productId));
   const variations = useSelector(selectVariationsByProductId(productId));
-  // const currentVariation: VariationModel | null = useMemo(
-  //   () =>
-  //     (variations &&
-  //       variations.length &&
-  //       variations.sort((v1, v2) => v1.price - v2.price)[0]) ||
-  //     null,
-  //   [product, variations, variationId],
-  // );
 
   const currentVariation: VariationModel | null = useMemo(
     () => variations?.find((v) => v.id === variationId) || null,
     [product, variations, variationId],
   );
+
+  useEffect(() => {
+    console.log('Current variation updated:', currentVariation);
+  }, [currentVariation]);
 
   // Behavior
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,7 +56,7 @@ export function useProduct(productId: number, variationId: number) {
 
   // Загрузка товара, если страница открыта без ранее загруженной модели
   useEffect(() => {
-    if (!product && productId) {
+    if (productId) {
       setLoading(true);
 
       getAllDataForPage(productId)
@@ -133,7 +129,7 @@ export function useProduct(productId: number, variationId: number) {
       dispatch(upsertVariations(variations));
       return variations;
     }
-  }, [product, productId, variationId]);
+  }, [productId, variationId]);
 
   useEffect(() => {
     setImagesLoading(true);

@@ -6,6 +6,8 @@ import { QuerySet, SessionBoundModel } from 'redux-orm';
 import { VariationModels, VariationSchema } from '../variation/variation.types';
 import Product from './product.model';
 import Variation from '../variation/variation.model';
+import Image from '../image/image.model';
+import { ImageSchema } from '../image/image.types';
 
 export type ProductModel = SessionBoundModel<Product, ProductSchema>;
 export type ProductModels = SessionBoundModel<Product, ProductSchema>[];
@@ -16,7 +18,8 @@ export interface ProductSchema {
   categoryId: number;
   description: string;
 
-  images: any;
+  // Related fields
+  images: QuerySet<Image, ImageSchema>;
   variations: QuerySet<Variation, VariationSchema>;
 }
 

@@ -7,13 +7,13 @@ import styled from 'styled-components';
 
 import { useCallback, useEffect, useState } from 'react';
 import arrowRightUrl from '../../../lib/assets/arrow-right.png';
-import { ImageSchema } from '../../../lib/features/image/image.types';
+import { ImageModels } from '../../../lib/features/image/image.types';
 import noImageUrl from './assets/no-image.jpg';
 
 const IMAGES_PER_PAGE = 5;
 
 interface Props {
-  images: ImageSchema[];
+  images: ImageModels;
 }
 export const SlideShow = ({ images }: Props) => {
   const [page, setPage] = useState<number>(1);
