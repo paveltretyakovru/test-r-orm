@@ -24,7 +24,7 @@ import {
 import { selectVariationById } from '../../../../lib/features/variation/variation.selectors';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../lib/hooks';
-import { addOrder } from '../../../../lib/features/order/order.actions';
+import { addVariationToCart } from '../../../../lib/features/order/order.actions';
 
 interface Props {
   product: ProductModel;
@@ -70,7 +70,7 @@ export const ProductCard = ({ product }: Props) => {
 
   const addToCard = useCallback(() => {
     if (variation) {
-      dispatch(addOrder(variation.id));
+      dispatch(addVariationToCart(variation.id));
     }
   }, [variation]);
 

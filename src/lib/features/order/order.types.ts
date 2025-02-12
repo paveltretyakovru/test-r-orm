@@ -19,6 +19,10 @@ export interface OrderSchema {
   id: number;
   status: OrderStatus;
   variationsIds: VariationSchema['id'][];
+  counts: {
+    count: number;
+    variationId: VariationSchema['id'];
+  }[];
 
   // Delivery information
   name: string;

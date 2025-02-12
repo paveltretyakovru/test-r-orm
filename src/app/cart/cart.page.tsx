@@ -5,13 +5,15 @@
 import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components';
 import { Button } from '../../lib/ui/button';
-import headerImageUrl from './assets/header-bg.png';
 import deleteImageUrl from './assets/delete.svg';
-import demoPhoneImageUrl from './assets/demo-phone.png';
+import headerImageUrl from './assets/header-bg.png';
 import minusImageUrl from './assets/minus.svg';
 import plusImageUrl from './assets/plus.svg';
+import { useCart } from './use-cart';
 
 export function Cart() {
+  const { cartItems, increment, decrement, total } = useCart();
+
   return (
     <Wrapper>
       <Row align="end">
@@ -33,7 +35,7 @@ export function Cart() {
                 <Col>
                   <CartCostWrapper>
                     <CostTitle>Стоимость корзины:</CostTitle>
-                    <Cost>1185000₽</Cost>
+                    <Cost>{total} ₽</Cost>
                   </CartCostWrapper>
                 </Col>
                 <Col>
@@ -46,44 +48,60 @@ export function Cart() {
             <Row>
               <Col>
                 <ProductListWrapper>
-                  <ProductWrapper>
-                    <ProductImage>
-                      <img src={demoPhoneImageUrl} />
-                    </ProductImage>
+                  {cartItems.map((item) => (
+                    <Row align="center">
+                      {/* <ProductWrapper> */}
+                      <Col md={12} lg={2}>
+                        <ProductImage>
+                          <img src={item.image} />
+                        </ProductImage>
+                      </Col>
 
-                    <ProductInforWrapper className="md:mt-0">
-                      <ProductName>
-                        Смартфон Xiaomi Redmi Note 8 Pro
-                      </ProductName>
-                      <ProductVariation>6/128GB, белый</ProductVariation>
+                      <Col lg={4}>
+                        <ProductInforWrapper>
+                          <ProductName>{item.title}</ProductName>
+                          <ProductVariation>{item.parameters}</ProductVariation>
 
-                      <ProductCountWrapper>
-                        <ProductCount>120 шт.</ProductCount>
-                        <ProductCountTimer>за 12:48:35</ProductCountTimer>
-                        <p>
-                          Куплено: <strong>150 шт.</strong>
-                        </p>
-                      </ProductCountWrapper>
-                    </ProductInforWrapper>
+                          <ProductCountWrapper>
+                            <ProductCount>120 шт.</ProductCount>
+                            <ProductCountTimer>за 12:48:35</ProductCountTimer>
+                            <p>
+                              Куплено: <strong>150 шт.</strong>
+                            </p>
+                          </ProductCountWrapper>
+                        </ProductInforWrapper>
+                      </Col>
 
-                    <ProductCounter>
-                      <ProductCounterButton>
-                        <img src={minusImageUrl} />
-                      </ProductCounterButton>
+                      <Col md={12} lg={3}>
+                        <ProductCounter>
+                          <ProductCounterButton
+                            onClick={() => decrement(item.variation)}
+                          >
+                            <img src={minusImageUrl} />
+                          </ProductCounterButton>
 
-                      <ProductCounterText>25</ProductCounterText>
+                          <ProductCounterText>{item.count}</ProductCounterText>
 
-                      <ProductCounterButton>
-                        <img src={plusImageUrl} />
-                      </ProductCounterButton>
-                    </ProductCounter>
+                          <ProductCounterButton
+                            onClick={() => increment(item.variation)}
+                          >
+                            <img src={plusImageUrl} />
+                          </ProductCounterButton>
+                        </ProductCounter>
+                      </Col>
 
-                    <ProductPrice>от 350 000 ₽</ProductPrice>
+                      <Col md={12} lg={2}>
+                        <ProductPrice>{item.count * item.price} ₽</ProductPrice>
+                      </Col>
 
-                    <Wastebasket className="mt-10 sm:mt-2">
-                      <img src={deleteImageUrl} />
-                    </Wastebasket>
-                  </ProductWrapper>
+                      <Col lg={1}>
+                        <Wastebasket className="mt-10 sm:mt-2">
+                          <img src={deleteImageUrl} />
+                        </Wastebasket>
+                      </Col>
+                      {/* </ProductWrapper> */}
+                    </Row>
+                  ))}
                 </ProductListWrapper>
               </Col>
             </Row>
@@ -127,23 +145,23 @@ const ProductPrice = styled.div`
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
 
-  display: flex;
+  /* display: flex;
   align-items: center;
-  white-space: nowrap;
+  white-space: nowrap; */
   margin: auto;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0;
 `;
 
 const ProductCounter = styled.div`
   display: flex;
   max-height: 50px;
+  max-width: 135px;
   align-items: center;
   border: 1px solid var(--content-border-color);
   border-radius: 35px;
   margin: auto;
-
-  @media only screen and (max-width: 600px) {
-    margin-top: 10px;
-  }
 `;
 
 const ProductCounterButton = styled.div`
@@ -174,6 +192,11 @@ const ProductName = styled.div`
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   color: var(--text-dark);
+
+  display: inline-block;
+  overflow: hidden !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const ProductWrapper = styled.div`
@@ -186,7 +209,11 @@ const ProductWrapper = styled.div`
 const ProductImage = styled.div`
   display: flex;
   justify-content: center;
-  margin-right: 20px;
+  padding-left: 20px;
+
+  img {
+    max-width: 100px;
+  }
 
   @media only screen and (max-width: 600px) {
     width: 100%;
@@ -199,10 +226,15 @@ const ProductInforWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 10px;
+  padding: 0 10px;
 `;
 
 const ProductVariation = styled(ProductName)`
   color: var(--color-copyright);
+  display: inline-block;
+  overflow: hidden !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const ProductCountWrapper = styled.div`
@@ -210,6 +242,7 @@ const ProductCountWrapper = styled.div`
   white-space: nowrap;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 10px;
 
   @media only screen and (max-width: 600px) {
     margin: 20px 0;
@@ -245,7 +278,7 @@ const ProductCountTimer = styled.div`
 `;
 
 const ProductListWrapper = styled.div`
-  padding: 40px 60px;
+  padding: 40px 0px;
 `;
 
 const HeaderTitle = styled.div`

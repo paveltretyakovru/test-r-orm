@@ -7,8 +7,13 @@ import { VariationSchema } from '../variation/variation.types';
 
 export enum orderActionType {
   addVariationToCart = 'order/addVariationToCart',
+  removeVariationFromCart = 'order/removeVariationFromCart',
 }
 
-export const addOrder = createAction<VariationSchema['id']>(
+export const addVariationToCart = createAction<VariationSchema['id']>(
   orderActionType.addVariationToCart,
+);
+
+export const removeVariationFromCart = createAction<VariationSchema['id']>(
+  orderActionType.removeVariationFromCart,
 );

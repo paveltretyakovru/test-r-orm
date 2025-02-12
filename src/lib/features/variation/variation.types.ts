@@ -10,6 +10,7 @@ import { ProductModel } from '../product/product.types';
 
 export type VariationModel = SessionBoundModel<Variation, VariationSchema>;
 export type VariationModels = SessionBoundModel<Variation, VariationSchema>[];
+export type VariationsQuerySet = QuerySet<Variation, VariationSchema>;
 
 export interface VariationSchema {
   id: number;

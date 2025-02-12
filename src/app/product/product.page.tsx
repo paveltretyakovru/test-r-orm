@@ -14,8 +14,11 @@ import { Skeleton } from '../../lib/ui/skeleton';
 import { SlideShow } from './components/slideshow';
 import { useProduct } from './use-product';
 import { ImageModels } from '../../lib/features/image/image.types';
+import { addVariationToCart } from '../../lib/features/order/order.actions';
+import { useAppDispatch } from '../../lib/hooks';
 
 export function Product() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { productId, variationId } = useParams();
   const { product, loading, imagesLoading, variation, variations } = useProduct(
@@ -121,6 +124,12 @@ export function Product() {
     ));
   }, [variations, variationId, productId, product]);
 
+  const addToCard = useCallback(() => {
+    if (variation) {
+      dispatch(addVariationToCart(variation.id));
+    }
+  }, [variation]);
+
   return (
     (!loading && !imagesLoading && product && variation && (
       <>
@@ -143,7 +152,9 @@ export function Product() {
 
               {collectedVariations}
 
-              <Button>В корзину за {variation.price}₽</Button>
+              <Button onClick={addToCard}>
+                В корзину за {variation.price}₽
+              </Button>
             </Info>
           </Col>
         </Row>
