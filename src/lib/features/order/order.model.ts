@@ -82,10 +82,16 @@ export class Order extends Model {
         // Если продукт ранее был занесён, обновляем счётчик
         if (cart.variationsIds.some((v) => v === newId)) {
           cart.update({
-            counts: cart.counts.map((v) => ({
-              count: v.count + 1,
-              variationId: v.variationId,
-            })),
+            counts: cart.counts.map((v) => {
+              if (v.variationId === newId) {
+                return {
+                  count: v.count + 1,
+                  variationId: v.variationId,
+                };
+              }
+
+              return v;
+            }),
           });
         } else {
           // Иначе добавляем новую запись
