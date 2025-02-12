@@ -23,12 +23,15 @@ import {
 } from '../../../../lib/features/variation/variation.types';
 import { selectVariationById } from '../../../../lib/features/variation/variation.selectors';
 import { useCallback, useEffect, useState } from 'react';
+import { useAppDispatch } from '../../../../lib/hooks';
+import { addOrder } from '../../../../lib/features/order/order.actions';
 
 interface Props {
   product: ProductModel;
 }
 
 export const ProductCard = ({ product }: Props) => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState<string>(notFoundImageUrl);
   const [variation, setVariation] = useState<VariationModel>();
@@ -65,25 +68,33 @@ export const ProductCard = ({ product }: Props) => {
     );
   }, [product.id, variation?.id]);
 
-  return (
-    <Wrapper onClick={click}>
-      <Image image={imageUrl} />
-      <Name>{product.name}</Name>
+  const addToCard = useCallback(() => {
+    if (variation) {
+      dispatch(addOrder(variation.id));
+    }
+  }, [variation]);
 
-      {(variation && <Price>от {variation.price} ₽</Price>) || (
-        <NoPrice>Цена не указана</NoPrice>
+  return (
+    <Wrapper>
+      <Image image={imageUrl} onClick={click} />
+      <Name onClick={click}>{product.name}</Name>
+
+      {(variation && <Price onClick={click}>от {variation.price} ₽</Price>) || (
+        <NoPrice onClick={click}>Цена не указана</NoPrice>
       )}
 
       {variation && (
         <>
-          <Discount>
+          <Discount onClick={click}>
             <span className="old-price">
               {(variation.price * (1 - 0.1)).toFixed(2)} ₽
             </span>{' '}
             <span className="discount-value">-10%</span>
           </Discount>
 
-          <Button variant="tertiary">Добавить в корзину</Button>
+          <Button onClick={addToCard} variant="tertiary">
+            Добавить в корзину
+          </Button>
         </>
       )}
     </Wrapper>

@@ -6,6 +6,7 @@ import { QuerySet, SessionBoundModel } from 'redux-orm';
 import Variation from './variation.model';
 import { VariationPropertyValue } from '../variation-property-value/variation-property-value.model';
 import { VariationPropertyValueSchema } from '../variation-property-value/variation-property-value.types';
+import { ProductModel } from '../product/product.types';
 
 export type VariationModel = SessionBoundModel<Variation, VariationSchema>;
 export type VariationModels = SessionBoundModel<Variation, VariationSchema>[];
@@ -18,6 +19,7 @@ export interface VariationSchema {
 
   // Related fields
   values: QuerySet<VariationPropertyValue, VariationPropertyValueSchema>;
+  product: ProductModel;
 }
 
 export interface VariationResponse {

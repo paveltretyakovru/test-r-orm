@@ -5,14 +5,21 @@
 import { Col, Row, Visible } from 'react-grid-system';
 import styled from 'styled-components';
 import { Avatar } from './avatar';
-import { Cart } from './cart';
+import { CartIcon } from './cart-icon';
 import { Search } from './search';
 import { Location } from './location';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
+import { selectCartOrder } from '../../../../lib/features/order/order.selectors';
 
 export function AppBar() {
   const navigate = useNavigate();
+  const cart = useSelector(selectCartOrder);
+
+  useEffect(() => {
+    console.log('Cart updated', cart);
+  }, [cart]);
 
   const navigateToRoot = useCallback(() => navigate('/'), []);
 
@@ -40,7 +47,10 @@ export function AppBar() {
               md={3}
               style={{ display: 'flex', justifyContent: 'space-around' }}
             >
-              <Cart />
+              <CartIcon
+                value={cart?.variations.all().toModelArray().length || 0}
+              />
+
               <Avatar path="/avatars/ava-1.png" />
             </Col>
           </Row>
@@ -62,7 +72,9 @@ export function AppBar() {
               md={3}
               style={{ display: 'flex', justifyContent: 'space-around' }}
             >
-              <Cart />
+              <CartIcon
+                value={cart?.variations.all().toModelArray().length || 0}
+              />
               <Avatar path="/avatars/ava-1.png" />
             </Col>
           </Row>

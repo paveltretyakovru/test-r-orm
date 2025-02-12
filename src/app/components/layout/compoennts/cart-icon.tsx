@@ -2,15 +2,26 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // Images
 import basketImageUrl from '../assets/basket.png';
+import { useNavigate } from 'react-router';
+import { useCallback } from 'react';
+import { Cart } from '../../../cart/cart.page';
 
-export function Cart() {
+interface Props {
+  value: number;
+}
+
+export function CartIcon({ value }: Props) {
+  const navigate = useNavigate();
+
+  const goToCart = useCallback(() => navigate(Cart.route), []);
+
   return (
-    <Wrapper className="flex items-center justify-center">
-      <Counter>10+</Counter>
+    <Wrapper className="flex items-center justify-center" onClick={goToCart}>
+      <Counter>{value}</Counter>
       <img src={basketImageUrl} alt="Корзина" width={20} height={20} />
     </Wrapper>
   );
@@ -27,6 +38,8 @@ const Counter = styled.div`
 `;
 
 const Wrapper = styled.div`
+  cursor: pointer;
+
   min-width: 50px;
   max-width: 50px;
   min-height: 50px;

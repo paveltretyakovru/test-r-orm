@@ -10,9 +10,11 @@ import Image from './features/image/image.model';
 import { VariationProperty } from './features/variation-property/variation-property.model';
 import { VariationPropertyValue } from './features/variation-property-value/variation-property-value.model';
 import { VariationPropertyListValue } from './features/variation-property-list-value/variaton-property-list-value.model';
+import { Order } from './features/order/order.model';
 
 const schema = {
   Image,
+  Order,
   Product,
   Category,
   Variation,
@@ -29,6 +31,7 @@ export const orm: ORM<Schema> = new ORM<Schema>({
 
 orm.register(
   Image,
+  Order,
   Product,
   Category,
   Variation,
