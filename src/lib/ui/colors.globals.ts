@@ -22,6 +22,7 @@ export const ColorsGlobal = createGlobalStyle`
 
   /* Ui */
   --variant-border: #CECECE;
+  --content-border-color: #AEC2EA;
 
   /* Sizes */
   --footer-height: 215px;
