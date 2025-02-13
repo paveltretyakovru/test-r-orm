@@ -2,24 +2,24 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
+import { useCallback, useEffect } from 'react';
 import { Col, Row, Visible } from 'react-grid-system';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import styled from 'styled-components';
+import { selectCartProducts } from '../../../../lib/features/cart-product/cart-product.selectors';
 import { Avatar } from './avatar';
 import { CartIcon } from './cart-icon';
-import { Search } from './search';
 import { Location } from './location';
-import { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
-import { selectCartOrder } from '../../../../lib/features/order/order.selectors';
+import { Search } from './search';
 
 export function AppBar() {
   const navigate = useNavigate();
-  const cart = useSelector(selectCartOrder);
+  const cartProducts = useSelector(selectCartProducts);
 
   useEffect(() => {
-    console.log('Cart updated', cart);
-  }, [cart]);
+    console.log('Cart updated', cartProducts);
+  }, [cartProducts]);
 
   const navigateToRoot = useCallback(() => navigate('/'), []);
 
@@ -47,9 +47,7 @@ export function AppBar() {
               md={3}
               style={{ display: 'flex', justifyContent: 'space-around' }}
             >
-              <CartIcon
-                value={cart?.variations.all().toModelArray().length || 0}
-              />
+              <CartIcon value={cartProducts.length || 0} />
 
               <Avatar path="/avatars/ava-1.png" />
             </Col>
@@ -72,9 +70,7 @@ export function AppBar() {
               md={3}
               style={{ display: 'flex', justifyContent: 'space-around' }}
             >
-              <CartIcon
-                value={cart?.variations.all().toModelArray().length || 0}
-              />
+              <CartIcon value={cartProducts.length || 0} />
               <Avatar path="/avatars/ava-1.png" />
             </Col>
           </Row>

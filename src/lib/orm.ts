@@ -11,6 +11,7 @@ import { VariationProperty } from './features/variation-property/variation-prope
 import { VariationPropertyValue } from './features/variation-property-value/variation-property-value.model';
 import { VariationPropertyListValue } from './features/variation-property-list-value/variaton-property-list-value.model';
 import { Order } from './features/order/order.model';
+import { CartProduct } from './features/cart-product/cart-product.model';
 
 const schema = {
   Image,
@@ -18,6 +19,7 @@ const schema = {
   Product,
   Category,
   Variation,
+  CartProduct,
   VariationProperty,
   VariationPropertyValue,
   VariationPropertyListValue,
@@ -35,6 +37,7 @@ orm.register(
   Product,
   Category,
   Variation,
+  CartProduct,
   VariationProperty,
   VariationPropertyValue,
   VariationPropertyListValue,

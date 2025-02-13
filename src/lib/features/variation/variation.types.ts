@@ -7,6 +7,7 @@ import Variation from './variation.model';
 import { VariationPropertyValue } from '../variation-property-value/variation-property-value.model';
 import { VariationPropertyValueSchema } from '../variation-property-value/variation-property-value.types';
 import { ProductModel } from '../product/product.types';
+import { CartProductModel } from '../cart-product/cart-product.types';
 
 export type VariationModel = SessionBoundModel<Variation, VariationSchema>;
 export type VariationModels = SessionBoundModel<Variation, VariationSchema>[];
@@ -21,6 +22,7 @@ export interface VariationSchema {
   // Related fields
   values: QuerySet<VariationPropertyValue, VariationPropertyValueSchema>;
   product: ProductModel;
+  cartProduct: CartProductModel | null;
 }
 
 export interface VariationResponse {

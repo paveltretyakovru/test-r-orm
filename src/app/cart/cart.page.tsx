@@ -12,7 +12,7 @@ import plusImageUrl from './assets/plus.svg';
 import { useCart } from './use-cart';
 
 export function Cart() {
-  const { cartItems, increment, decrement, total } = useCart();
+  const { products: cartItems, increment, decrement, total } = useCart();
 
   return (
     <Wrapper>
@@ -74,24 +74,20 @@ export function Cart() {
 
                       <Col md={12} lg={3}>
                         <ProductCounter>
-                          <ProductCounterButton
-                            onClick={() => decrement(item.variation)}
-                          >
+                          <ProductCounterButton onClick={() => decrement(item)}>
                             <img src={minusImageUrl} />
                           </ProductCounterButton>
 
                           <ProductCounterText>{item.count}</ProductCounterText>
 
-                          <ProductCounterButton
-                            onClick={() => increment(item.variation)}
-                          >
+                          <ProductCounterButton onClick={() => increment(item)}>
                             <img src={plusImageUrl} />
                           </ProductCounterButton>
                         </ProductCounter>
                       </Col>
 
                       <Col md={12} lg={2}>
-                        <ProductPrice>{item.count * item.price} ₽</ProductPrice>
+                        <ProductPrice>{item.totalPrice} ₽</ProductPrice>
                       </Col>
 
                       <Col lg={1}>

@@ -14,8 +14,8 @@ import { Skeleton } from '../../lib/ui/skeleton';
 import { SlideShow } from './components/slideshow';
 import { useProduct } from './use-product';
 import { ImageModels } from '../../lib/features/image/image.types';
-import { addVariationToCart } from '../../lib/features/order/order.actions';
 import { useAppDispatch } from '../../lib/hooks';
+import { upsertCartProduct } from '../../lib/features/cart-product/cart-product.actions';
 
 export function Product() {
   const dispatch = useAppDispatch();
@@ -126,7 +126,7 @@ export function Product() {
 
   const addToCard = useCallback(() => {
     if (variation) {
-      dispatch(addVariationToCart(variation.id));
+      dispatch(upsertCartProduct({ variationId: variation.id }));
     }
   }, [variation]);
 

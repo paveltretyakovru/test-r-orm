@@ -5,26 +5,18 @@
 
 import styled from 'styled-components';
 
-import { Button } from '../../../../lib/ui/button';
-import { Product } from '../../../product/product.page';
-import { useSelector } from 'react-redux';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import notFoundImageUrl from '../../../../lib/assets/no-image.jpg';
-import { selectImages } from '../../../../lib/features/image/image.selectors';
-import { selectProduct } from '../../../../lib/features/product/product.selectors';
-import {
-  ProductModel,
-  ProductSchema,
-} from '../../../../lib/features/product/product.types';
+import { ProductModel } from '../../../../lib/features/product/product.types';
 import {
   VariationModel,
   VariationModels,
-  VariationSchema,
 } from '../../../../lib/features/variation/variation.types';
-import { selectVariationById } from '../../../../lib/features/variation/variation.selectors';
-import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../../../lib/hooks';
-import { addVariationToCart } from '../../../../lib/features/order/order.actions';
+import { Button } from '../../../../lib/ui/button';
+import { Product } from '../../../product/product.page';
+import { upsertCartProduct } from '../../../../lib/features/cart-product/cart-product.actions';
 
 interface Props {
   product: ProductModel;
@@ -70,7 +62,7 @@ export const ProductCard = ({ product }: Props) => {
 
   const addToCard = useCallback(() => {
     if (variation) {
-      dispatch(addVariationToCart(variation.id));
+      dispatch(upsertCartProduct({ variationId: variation.id }));
     }
   }, [variation]);
 
