@@ -4,12 +4,14 @@
  */
 import { createAction } from '@reduxjs/toolkit';
 import {
+  CartProductModel,
   CartProductSchema,
   UpsertCartProductPayload,
 } from './cart-product.types';
 
 export enum CartProductActionType {
   upsert = 'cartProduct/upsert',
+  delete = 'cartProduct/delete',
   increment = 'cartProduct/increment',
   decrement = 'cartProduct/decrement',
 }
@@ -24,4 +26,8 @@ export const incrementCartProduct = createAction<CartProductSchema['id']>(
 
 export const decrementCartProduct = createAction<CartProductSchema['id']>(
   CartProductActionType.decrement,
+);
+
+export const deleteCartProduct = createAction<CartProductSchema['id']>(
+  CartProductActionType.delete,
 );

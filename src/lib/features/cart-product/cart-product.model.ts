@@ -12,6 +12,7 @@ import Model, {
 } from 'redux-orm';
 import { CartProductActionType } from './cart-product.actions';
 import {
+  CartProductModel,
   CartProductModels,
   CartProductSchema,
   isUpsertCartProductPayload,
@@ -92,6 +93,20 @@ export class CartProduct extends Model {
         }
 
         break;
+      }
+
+      case CartProductActionType.delete: {
+        const cartProduct = model.withId(payload as CartProductSchema['id']);
+
+        if (cartProduct) {
+          cartProduct.delete();
+        } else {
+          console.error('Cart product not founded for delete from cart', {
+            model,
+            payload,
+            cartProduct,
+          });
+        }
       }
     }
   }

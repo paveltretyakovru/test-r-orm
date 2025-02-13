@@ -12,7 +12,13 @@ import plusImageUrl from './assets/plus.svg';
 import { useCart } from './use-cart';
 
 export function Cart() {
-  const { products: cartItems, increment, decrement, total } = useCart();
+  const {
+    products: cartItems,
+    increment,
+    decrement,
+    total,
+    deleteProduct,
+  } = useCart();
 
   return (
     <Wrapper>
@@ -91,7 +97,10 @@ export function Cart() {
                       </Col>
 
                       <Col lg={1}>
-                        <Wastebasket className="mt-10 sm:mt-2">
+                        <Wastebasket
+                          onClick={() => deleteProduct(item)}
+                          className="mt-10 sm:mt-2"
+                        >
                           <img src={deleteImageUrl} />
                         </Wastebasket>
                       </Col>

@@ -4,8 +4,6 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCartOrder } from '../../lib/features/order/order.selectors';
-import { OrderModel } from '../../lib/features/order/order.types';
 import { ProductModel } from '../../lib/features/product/product.types';
 import { VariationModel } from '../../lib/features/variation/variation.types';
 import { useAppDispatch } from '../../lib/hooks';
@@ -16,6 +14,7 @@ import {
 } from '../../lib/features/cart-product/cart-product.types';
 import {
   decrementCartProduct,
+  deleteCartProduct,
   incrementCartProduct,
 } from '../../lib/features/cart-product/cart-product.actions';
 
@@ -103,5 +102,18 @@ export function useCart() {
     return result;
   }, [cartProducts]);
 
-  return { increment, decrement, total, cartProducts, products };
+  const deleteProduct = useCallback(
+    (product: CartProductItem) => {
+      const conf = window.confirm(
+        'Вы уверены, что хотите убрать товар из списка?',
+      );
+
+      if (conf) {
+        dispatch(deleteCartProduct(product.cartProduct.id));
+      }
+    },
+    [cartProducts],
+  );
+
+  return { increment, decrement, total, cartProducts, products, deleteProduct };
 }
