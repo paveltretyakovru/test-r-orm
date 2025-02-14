@@ -3,7 +3,7 @@
  *   All rights reserved.
  */
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 type Variants = 'primary' | 'tertiary';
@@ -12,16 +12,29 @@ interface Props {
   variant?: Variants;
   onClick?(): void;
   children?: React.ReactNode;
+  disabled?: boolean;
 }
-export function Button({ children, onClick, variant = 'primary' }: Props) {
+export function Button({
+  children,
+  onClick,
+  variant = 'primary',
+  disabled,
+}: Props) {
+  const click = useCallback(() => {
+    if (!disabled && onClick) {
+      onClick();
+    }
+  }, [onClick, disabled]);
+
   return (
-    <Wrapper $variant={variant} onClick={onClick}>
+    <Wrapper $disabled={!!disabled} $variant={variant} onClick={click}>
       {children}
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div<{ $variant: Variants }>`
+const Wrapper = styled.div<{ $variant: Variants; $disabled: boolean }>`
+  opacity: ${(p) => (p.$disabled && 0.7) || 1};
   color: ${(p) => {
     switch (p.$variant) {
       case 'primary':
@@ -33,10 +46,11 @@ const Wrapper = styled.div<{ $variant: Variants }>`
         return 'var(--white)';
     }
   }};
+
   cursor: pointer;
+  border: 1px solid var(--blue);
   padding: 11px 10px;
   border-radius: 51px;
-  border: 1px solid var(--blue);
   background-color: ${(p) => {
     switch (p.$variant) {
       case 'primary':

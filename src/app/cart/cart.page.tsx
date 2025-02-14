@@ -13,11 +13,13 @@ import { useCart } from './use-cart';
 
 export function Cart() {
   const {
-    products: cartItems,
+    total,
+    products,
     increment,
     decrement,
-    total,
     deleteProduct,
+    checkoutDisabled,
+    navigateToCheckout,
   } = useCart();
 
   return (
@@ -44,9 +46,16 @@ export function Cart() {
                     <Cost>{total} ₽</Cost>
                   </CartCostWrapper>
                 </Col>
+
                 <Col>
-                  <Button>Оформить</Button>
+                  <Button
+                    disabled={checkoutDisabled}
+                    onClick={() => navigateToCheckout()}
+                  >
+                    Оформить
+                  </Button>
                 </Col>
+
                 <Col />
               </Row>
             </Header>
@@ -54,58 +63,78 @@ export function Cart() {
             <Row>
               <Col>
                 <ProductListWrapper>
-                  {cartItems.map((item) => (
-                    <Row align="center">
-                      {/* <ProductWrapper> */}
-                      <Col md={12} lg={2}>
-                        <ProductImage>
-                          <img src={item.image} />
-                        </ProductImage>
-                      </Col>
+                  {products.map((item) => (
+                    <>
+                      <Row align="center" justify="center">
+                        <Col
+                          md={11}
+                          style={{
+                            borderTop: '1px solid#AEC2EA',
+                            margin: '20px 0',
+                          }}
+                        />
+                      </Row>
+                      <Row key={item.cartProduct.id} align="center">
+                        {/* <ProductWrapper> */}
+                        <Col md={12} lg={2}>
+                          <ProductImage>
+                            <img src={item.image} />
+                          </ProductImage>
+                        </Col>
 
-                      <Col lg={4}>
-                        <ProductInforWrapper>
-                          <ProductName>{item.title}</ProductName>
-                          <ProductVariation>{item.parameters}</ProductVariation>
+                        <Col lg={4}>
+                          <ProductInforWrapper>
+                            <ProductName>{item.title}</ProductName>
 
-                          <ProductCountWrapper>
-                            <ProductCount>120 шт.</ProductCount>
-                            <ProductCountTimer>за 12:48:35</ProductCountTimer>
-                            <p>
-                              Куплено: <strong>150 шт.</strong>
-                            </p>
-                          </ProductCountWrapper>
-                        </ProductInforWrapper>
-                      </Col>
+                            <ProductVariation>
+                              {item.parameters}
+                            </ProductVariation>
 
-                      <Col md={12} lg={3}>
-                        <ProductCounter>
-                          <ProductCounterButton onClick={() => decrement(item)}>
-                            <img src={minusImageUrl} />
-                          </ProductCounterButton>
+                            <ProductCountWrapper>
+                              <ProductCount>120 шт.</ProductCount>
+                              <ProductCountTimer>за 12:48:35</ProductCountTimer>
+                              <p>
+                                Куплено: <strong>150 шт.</strong>
+                              </p>
+                            </ProductCountWrapper>
+                          </ProductInforWrapper>
+                        </Col>
 
-                          <ProductCounterText>{item.count}</ProductCounterText>
+                        <Col md={12} lg={3}>
+                          <ProductCounter>
+                            <ProductCounterButton
+                              onClick={() => decrement(item)}
+                            >
+                              <img src={minusImageUrl} />
+                            </ProductCounterButton>
 
-                          <ProductCounterButton onClick={() => increment(item)}>
-                            <img src={plusImageUrl} />
-                          </ProductCounterButton>
-                        </ProductCounter>
-                      </Col>
+                            <ProductCounterText>
+                              {item.count}
+                            </ProductCounterText>
 
-                      <Col md={12} lg={2}>
-                        <ProductPrice>{item.totalPrice} ₽</ProductPrice>
-                      </Col>
+                            <ProductCounterButton
+                              onClick={() => increment(item)}
+                            >
+                              <img src={plusImageUrl} />
+                            </ProductCounterButton>
+                          </ProductCounter>
+                        </Col>
 
-                      <Col lg={1}>
-                        <Wastebasket
-                          onClick={() => deleteProduct(item)}
-                          className="mt-10 sm:mt-2"
-                        >
-                          <img src={deleteImageUrl} />
-                        </Wastebasket>
-                      </Col>
-                      {/* </ProductWrapper> */}
-                    </Row>
+                        <Col md={12} lg={2}>
+                          <ProductPrice>{item.totalPrice} ₽</ProductPrice>
+                        </Col>
+
+                        <Col lg={1}>
+                          <Wastebasket
+                            onClick={() => deleteProduct(item)}
+                            className="mt-10 sm:mt-2"
+                          >
+                            <img src={deleteImageUrl} />
+                          </Wastebasket>
+                        </Col>
+                        {/* </ProductWrapper> */}
+                      </Row>
+                    </>
                   ))}
                 </ProductListWrapper>
               </Col>

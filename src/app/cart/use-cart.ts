@@ -17,6 +17,8 @@ import {
   deleteCartProduct,
   incrementCartProduct,
 } from '../../lib/features/cart-product/cart-product.actions';
+import { useNavigate } from 'react-router';
+import { Checkout } from '../checkout/checkout.page';
 
 interface CartProductItem {
   image: string;
@@ -32,9 +34,12 @@ interface CartProductItem {
 }
 
 export function useCart() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const cartProducts = useSelector(selectCartProducts) as CartProductModels;
+
   const [products, setProducts] = useState<CartProductItem[]>([]);
+  const checkoutDisabled = useMemo(() => !cartProducts.length, [products]);
 
   const increment = useCallback(
     (cartProduct: CartProductItem) =>
@@ -47,6 +52,10 @@ export function useCart() {
       dispatch(decrementCartProduct(cartProduct.variation.id)),
     [cartProducts],
   );
+
+  const navigateToCheckout = useCallback(() => {
+    navigate(Checkout.route);
+  }, []);
 
   useEffect(() => {
     const products: CartProductItem[] = [];
@@ -115,5 +124,14 @@ export function useCart() {
     [cartProducts],
   );
 
-  return { increment, decrement, total, cartProducts, products, deleteProduct };
+  return {
+    total,
+    products,
+    increment,
+    decrement,
+    cartProducts,
+    deleteProduct,
+    checkoutDisabled,
+    navigateToCheckout,
+  };
 }
