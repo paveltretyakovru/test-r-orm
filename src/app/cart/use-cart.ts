@@ -13,6 +13,7 @@ import {
   CartProductModels,
 } from '../../lib/features/cart-product/cart-product.types';
 import {
+  clearCartAction,
   decrementCartProduct,
   deleteCartProduct,
   incrementCartProduct,
@@ -57,6 +58,13 @@ export function useCart() {
     navigate(Checkout.route);
   }, []);
 
+  const clearCart = useCallback(
+    () =>
+      confirm('Вы уверены, что хотите очистить корзину?') &&
+      dispatch(clearCartAction()),
+    [],
+  );
+
   useEffect(() => {
     const products: CartProductItem[] = [];
 
@@ -93,10 +101,10 @@ export function useCart() {
         };
 
         products.push(product);
-
-        setProducts(products);
       }
     });
+
+    setProducts(products);
   }, [cartProducts]);
 
   const total = useMemo(() => {
@@ -129,6 +137,7 @@ export function useCart() {
     products,
     increment,
     decrement,
+    clearCart,
     cartProducts,
     deleteProduct,
     checkoutDisabled,

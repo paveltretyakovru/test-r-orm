@@ -17,6 +17,7 @@ export function Cart() {
     products,
     increment,
     decrement,
+    clearCart,
     deleteProduct,
     checkoutDisabled,
     navigateToCheckout,
@@ -29,7 +30,9 @@ export function Cart() {
           <Title>Корзина</Title>
         </Col>
         <Col>
-          <ClearCart className="md:mt-0">Очистить корзину</ClearCart>
+          <ClearCart onClick={() => clearCart()} className="md:mt-0">
+            Очистить корзину
+          </ClearCart>
         </Col>
       </Row>
       <Row>

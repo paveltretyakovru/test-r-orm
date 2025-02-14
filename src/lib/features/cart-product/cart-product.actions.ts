@@ -12,6 +12,7 @@ import {
 export enum CartProductActionType {
   upsert = 'cartProduct/upsert',
   delete = 'cartProduct/delete',
+  clearCart = 'cartProduct/clearCart',
   increment = 'cartProduct/increment',
   decrement = 'cartProduct/decrement',
 }
@@ -31,3 +32,5 @@ export const decrementCartProduct = createAction<CartProductSchema['id']>(
 export const deleteCartProduct = createAction<CartProductSchema['id']>(
   CartProductActionType.delete,
 );
+
+export const clearCartAction = createAction(CartProductActionType.clearCart);

@@ -3,20 +3,12 @@
  *   All rights reserved.
  */
 import { PayloadAction } from '@reduxjs/toolkit';
-import Model, {
-  attr,
-  FieldSpecMap,
-  ModelType,
-  oneToOne,
-  Session,
-} from 'redux-orm';
+import Model, { attr, FieldSpecMap, ModelType, oneToOne } from 'redux-orm';
 import { CartProductActionType } from './cart-product.actions';
 import {
-  CartProductModel,
   CartProductModels,
   CartProductSchema,
   isUpsertCartProductPayload,
-  UpsertCartProductPayload,
 } from './cart-product.types';
 
 export class CartProduct extends Model {
@@ -107,6 +99,13 @@ export class CartProduct extends Model {
             cartProduct,
           });
         }
+
+        break;
+      }
+
+      case CartProductActionType.clearCart: {
+        model.all().delete();
+        break;
       }
     }
   }
