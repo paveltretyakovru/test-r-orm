@@ -3,13 +3,14 @@
  *   All rights reserved.
  */
 import dayjs from 'dayjs';
-import { ChangeEvent, useCallback, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
 export const useCheckout = () => {
   const [date, setDate] = useState<dayjs.Dayjs | null>(null);
   const [time, setTime] = useState<dayjs.Dayjs | null>(null);
   const [name, setName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
 
   const onChangeName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value),
@@ -33,5 +34,8 @@ export const useCheckout = () => {
 
     phone,
     onChangePhone,
+
+    address,
+    setAddress,
   };
 };

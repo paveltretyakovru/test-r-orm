@@ -6,20 +6,25 @@ import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components';
 
 import { DateTimePicker, MobileTimePicker } from '@mui/x-date-pickers';
-import { Button } from '../../lib/ui/button';
-import navigationImageUrl from './assets/navigation.svg';
-import { useCheckout } from './use-checkout';
+import { useCallback, useEffect } from 'react';
 import { IMaskInput } from 'react-imask';
+import { Button } from '../../lib/ui/button';
+import { Modal } from '../../lib/ui/modal';
+import navigationImageUrl from './assets/navigation.svg';
+import { ChooseAddress } from './components/choose-address';
+import { useCheckout } from './use-checkout';
 
 export const Checkout = () => {
   const {
     date,
-    setDate,
     time,
-    setTime,
     name,
     phone,
+    setDate,
+    setTime,
+    address,
     onChangeName,
+    setAddress,
     onChangePhone,
   } = useCheckout();
 
@@ -70,10 +75,23 @@ export const Checkout = () => {
             </Row>
             <Row>
               <Col>
-                <Location>
-                  <img src={navigationImageUrl} />
-                  <span>Выберите адрес доставки</span>
-                </Location>
+                <Modal
+                  element={
+                    <Location className="cursor-pointer">
+                      <img src={navigationImageUrl} />
+                      <span>{address || 'Выберите адрес доставки'}</span>
+                    </Location>
+                  }
+                >
+                  {({ close }) => (
+                    <ChooseAddress
+                      onDone={(address) => {
+                        setAddress(address);
+                        close();
+                      }}
+                    />
+                  )}
+                </Modal>
               </Col>
             </Row>
 

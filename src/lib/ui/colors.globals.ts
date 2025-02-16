@@ -20,6 +20,13 @@ export const ColorsGlobal = createGlobalStyle`
   --color-copyright: #8d8d8e;
   --gray-blue: #F0F4FB;
 
+  --text-primary: #17191C;
+  --bg-secondary: #FFFFFF;
+  --bg-hover: #F4F4F8;
+  --click-state: #1F47B4;
+
+  --color-modal-overlay: rgba(40, 40, 40, 0.7);
+
   /* Ui */
   --variant-border: #CECECE;
   --content-border-color: #AEC2EA;
