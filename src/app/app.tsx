@@ -10,6 +10,7 @@ import { Cart } from './cart/cart.page';
 import { Product } from './product/product.page';
 import { NotFound } from './not-found.page';
 import { Checkout } from './checkout/checkout.page';
+import { Orders } from './orders/orders.page';
 
 const App = () => {
   return (
@@ -27,6 +28,9 @@ const App = () => {
 
         {/* Checkout */}
         <Route path={Checkout.route} element={<Checkout />} />
+
+        {/* Orders */}
+        <Route path={Orders.route} element={<Orders />} />
 
         {/* System routes */}
         <Route path={NotFound.route} element={<NotFound />} />
