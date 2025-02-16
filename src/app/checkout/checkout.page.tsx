@@ -5,17 +5,23 @@
 import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components';
 
-import navigationImageUrl from './assets/navigation.svg';
+import { DateTimePicker, MobileTimePicker } from '@mui/x-date-pickers';
 import { Button } from '../../lib/ui/button';
-import {
-  DateTimePicker,
-  MobileTimePicker,
-  StaticDateTimePicker,
-} from '@mui/x-date-pickers';
+import navigationImageUrl from './assets/navigation.svg';
 import { useCheckout } from './use-checkout';
+import { IMaskInput } from 'react-imask';
 
 export const Checkout = () => {
-  const { date, setDate, time, setTime } = useCheckout();
+  const {
+    date,
+    setDate,
+    time,
+    setTime,
+    name,
+    phone,
+    onChangeName,
+    onChangePhone,
+  } = useCheckout();
 
   return (
     <Wrapper>
@@ -79,7 +85,11 @@ export const Checkout = () => {
             </Row>
             <Row>
               <Col>
-                <Input />
+                <Input
+                  mask={/^[A-Za-z\s]*$/}
+                  value={name}
+                  onChange={onChangeName}
+                />
               </Col>
             </Row>
 
@@ -91,7 +101,14 @@ export const Checkout = () => {
             </Row>
             <Row>
               <Col>
-                <Input />
+                <Input
+                  mask="+7 000 000-00-00" // Маска для номера телефона
+                  definitions={{
+                    '0': /[0-9]/, // Определяем, что "0" означает любую цифру
+                  }}
+                  value={phone}
+                  onChange={onChangePhone}
+                />
               </Col>
             </Row>
           </ContentWrapper>
@@ -170,7 +187,7 @@ const Info = styled.div`
   letter-spacing: 0px;
 `;
 
-const Input = styled.input`
+const Input = styled(IMaskInput)`
   width: 100%;
   border: 1px solid var(--gray-blue);
   padding: 10px;
