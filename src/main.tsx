@@ -10,6 +10,8 @@ import { store } from './lib/store';
 import { BrowserRouter } from 'react-router';
 import { ColorsGlobal } from './lib/ui/colors.globals';
 import { ToastContainer } from 'react-toastify';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 const container = document.getElementById('root');
 
@@ -19,9 +21,11 @@ if (container) {
   root.render(
     <Provider store={store}>
       <BrowserRouter>
-        <ColorsGlobal />
-        <App />
-        <ToastContainer />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ColorsGlobal />
+          <App />
+          <ToastContainer />
+        </LocalizationProvider>
       </BrowserRouter>
     </Provider>,
   );

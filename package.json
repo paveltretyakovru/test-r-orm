@@ -15,9 +15,14 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.4",
+    "@mui/x-date-pickers": "^7.26.0",
     "@reduxjs/toolkit": "^2.0.1",
     "@tailwindcss/vite": "^4.0.3",
     "@types/redux-orm": "^0.16.1",
+    "dayjs": "^1.11.13",
     "object-hash": "^3.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

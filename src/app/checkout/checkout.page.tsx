@@ -7,8 +7,16 @@ import styled from 'styled-components';
 
 import navigationImageUrl from './assets/navigation.svg';
 import { Button } from '../../lib/ui/button';
+import {
+  DateTimePicker,
+  MobileTimePicker,
+  StaticDateTimePicker,
+} from '@mui/x-date-pickers';
+import { useCheckout } from './use-checkout';
 
 export const Checkout = () => {
+  const { date, setDate, time, setTime } = useCheckout();
+
   return (
     <Wrapper>
       <Row align="start">
@@ -28,10 +36,23 @@ export const Checkout = () => {
             </Row>
             <Row>
               <Col>
-                <Placeholder>Выберите дату</Placeholder>
+                {/* <Placeholder>Выберите дату</Placeholder> */}
+                <DateTimePicker
+                  label="Дата"
+                  value={date}
+                  views={['month', 'day']}
+                  name="startDateTime"
+                  onChange={setDate}
+                />
               </Col>
               <Col>
-                <Placeholder>Выберите время</Placeholder>
+                {/* <Placeholder>Выберите время</Placeholder> */}
+                <MobileTimePicker
+                  ampm={false}
+                  label="Время"
+                  value={time}
+                  onChange={setTime}
+                />
               </Col>
             </Row>
 
@@ -63,7 +84,6 @@ export const Checkout = () => {
             </Row>
 
             {/* Phone */}
-            {/* Name */}
             <Row style={{ marginTop: 30 }}>
               <Col>
                 <Label>Телефон</Label>
@@ -83,6 +103,7 @@ export const Checkout = () => {
               <Col>
                 <p>Стоимость товаров:</p>
               </Col>
+
               <PriceCol>
                 <p>12312 ₽</p>
               </PriceCol>
@@ -101,6 +122,7 @@ export const Checkout = () => {
               <Col>
                 <Final>Итого:</Final>
               </Col>
+
               <PriceCol>
                 <Final style={{ fontWeight: 'bold', color: 'black' }}>
                   200784 ₽
