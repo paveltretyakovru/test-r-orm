@@ -6,12 +6,13 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './app/app';
 import './index.css';
-import { store } from './lib/store';
+import { persistor, store } from './lib/store';
 import { BrowserRouter } from 'react-router';
 import { ColorsGlobal } from './lib/ui/colors.globals';
 import { ToastContainer } from 'react-toastify';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const container = document.getElementById('root');
 
@@ -20,13 +21,15 @@ if (container) {
 
   root.render(
     <Provider store={store}>
-      <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ColorsGlobal />
-          <App />
-          <ToastContainer />
-        </LocalizationProvider>
-      </BrowserRouter>
+      <PersistGate persistor={persistor}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ColorsGlobal />
+            <App />
+            <ToastContainer />
+          </LocalizationProvider>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>,
   );
 } else {
