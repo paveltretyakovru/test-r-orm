@@ -3,9 +3,14 @@
  *   All rights reserved.
  */
 import { createAction } from '@reduxjs/toolkit';
-import { VariationSchema } from '../variation/variation.types';
+import { CreateOrderPayload } from './order.types';
 
 export enum orderActionType {
+  create = 'order/create',
   addVariationToCart = 'order/addVariationToCart',
   decrementVariationFromCart = 'order/decrementVariationFromCart',
 }
+
+export const createOrderAction = createAction<CreateOrderPayload>(
+  orderActionType.create,
+);

@@ -41,7 +41,6 @@ export const ProductCard = ({ product }: Props) => {
   }, [product]);
 
   useEffect(() => {
-    console.log('Updated product variations');
     const variations = product.variations
       .all()
       .toModelArray() as VariationModels;

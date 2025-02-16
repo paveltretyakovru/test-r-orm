@@ -5,6 +5,7 @@
 import { QuerySet, SessionBoundModel } from 'redux-orm';
 import { VariationModels, VariationSchema } from '../variation/variation.types';
 import { Order } from './order.model';
+import { CartProductModels } from '../cart-product/cart-product.types';
 
 export enum OrderStatus {
   cart, // — товары добавлены в корзину, но заказ еще не оформлен.
@@ -39,3 +40,10 @@ export interface OrderSchema {
 
 export type OrderModel = SessionBoundModel<Order, OrderSchema>;
 export type OrderModels = SessionBoundModel<Order, OrderSchema>[];
+
+export interface CreateOrderPayload {
+  name: string;
+  phone: string;
+  address: string;
+  deliveryDate: number;
+}

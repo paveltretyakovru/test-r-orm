@@ -42,10 +42,6 @@ export function useProduct(productId: number, variationId: number) {
     [product, variations, variationId],
   );
 
-  useEffect(() => {
-    console.log('Current variation updated:', currentVariation);
-  }, [currentVariation]);
-
   // Behavior
   const [loading, setLoading] = useState<boolean>(false);
   const [imagesLoading, setImagesLoading] = useState<boolean>(false);
@@ -82,17 +78,15 @@ export function useProduct(productId: number, variationId: number) {
       );
 
       // Загружаем список параметров товара
-      const properties = await getVariationProperties(
+      await getVariationProperties(
         values.map((v) => v.product_variation_property_id),
       );
 
-      const listValues = await getVariationPropertyListValues(
+      await getVariationPropertyListValues(
         values
           .filter((v) => v.product_variation_property_list_value_id)
           .map((v) => v.product_variation_property_list_value_id),
       );
-
-      console.log('Properties list values is fetched', listValues);
     }
 
     async function getVariationProperties(

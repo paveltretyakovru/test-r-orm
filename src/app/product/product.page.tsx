@@ -26,10 +26,6 @@ export function Product() {
     Number(variationId),
   );
 
-  // useEffect(() => {
-  //   console.log('Variation id updated:', variationId);
-  // }, [variationId]);
-
   const navigateToVariant = useCallback(
     (variationId: VariationSchema['id']) =>
       navigate(

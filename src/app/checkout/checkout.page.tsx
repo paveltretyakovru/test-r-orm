@@ -6,7 +6,6 @@ import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components';
 
 import { DateTimePicker, MobileTimePicker } from '@mui/x-date-pickers';
-import { useCallback, useEffect } from 'react';
 import { IMaskInput } from 'react-imask';
 import { Button } from '../../lib/ui/button';
 import { Modal } from '../../lib/ui/modal';
@@ -19,13 +18,16 @@ export const Checkout = () => {
     date,
     time,
     name,
+    total,
     phone,
     setDate,
     setTime,
     address,
+    makeOrder,
     onChangeName,
     setAddress,
     onChangePhone,
+    formIsValid,
   } = useCheckout();
 
   return (
@@ -140,7 +142,7 @@ export const Checkout = () => {
               </Col>
 
               <PriceCol>
-                <p>12312 ₽</p>
+                <p>{total} ₽</p>
               </PriceCol>
             </Row>
 
@@ -149,7 +151,7 @@ export const Checkout = () => {
                 <p>Стоимость доставки:</p>
               </Col>
               <PriceCol>
-                <p>12312 ₽</p>
+                <p>0 ₽</p>
               </PriceCol>
             </Row>
 
@@ -160,13 +162,15 @@ export const Checkout = () => {
 
               <PriceCol>
                 <Final style={{ fontWeight: 'bold', color: 'black' }}>
-                  200784 ₽
+                  {total} ₽
                 </Final>
               </PriceCol>
             </TotalRow>
           </Info>
 
-          <Button variant="primary">Сделать заказ</Button>
+          <Button variant="primary" disabled={!formIsValid} onClick={makeOrder}>
+            Сделать заказ
+          </Button>
         </Col>
       </Row>
     </Wrapper>

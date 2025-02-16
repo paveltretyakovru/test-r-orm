@@ -17,10 +17,6 @@ export function AppBar() {
   const navigate = useNavigate();
   const cartProducts = useSelector(selectCartProducts);
 
-  useEffect(() => {
-    console.log('Cart updated', cartProducts);
-  }, [cartProducts]);
-
   const navigateToRoot = useCallback(() => navigate('/'), []);
 
   return (

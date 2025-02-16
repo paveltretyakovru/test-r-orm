@@ -34,11 +34,6 @@ export const ChooseAddress = ({ onDone }: Props) => {
     }
   }, []);
 
-  const done = useCallback(() => {
-    console.log('CLICK DONE!');
-    onDone(address);
-  }, [address]);
-
   return (
     <div
       style={{

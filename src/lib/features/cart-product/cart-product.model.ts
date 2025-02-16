@@ -33,8 +33,6 @@ export class CartProduct extends Model {
   ): void {
     switch (type) {
       case CartProductActionType.upsert: {
-        console.log('UPSERT', payload);
-
         if (isUpsertCartProductPayload(payload)) {
           model.upsert({
             ...(payload as CartProductSchema),

@@ -57,7 +57,6 @@ function LeafletgeoSearch({ position }: LeafletgeoSearchProps) {
 
     // Обработчик события выбора локации
     map.on('geosearch/showlocation', (event) => {
-      console.log('SHOW LOACTION EVENT', event);
       map.setView(
         [(event as any).location.y, (event as any).location.x],
         map.getZoom(),
@@ -92,7 +91,6 @@ function ClickLayer({ onClick }: ClickLayerProps) {
 
   useEffect(() => {
     map.addEventListener('click', (event) => {
-      console.log('Click event', event);
       if (onClick) {
         onClick([event.latlng.lat, event.latlng.lng]);
       }
