@@ -19,11 +19,11 @@ export const Orders = () => {
       </Row>
 
       <Row>
-        <Col md={6} sm={12}>
-          {orders.map((order) => (
+        {orders.map((order) => (
+          <Col lg={6} md={12} sm={12} className="mb-6">
             <OrderCard key={order.id} order={order} />
-          ))}
-        </Col>
+          </Col>
+        ))}
       </Row>
     </Wrapper>
   );

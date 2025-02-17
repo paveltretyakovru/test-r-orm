@@ -58,7 +58,7 @@ export const Order = () => {
           <Row>
             {/* Products */}
             {order.variations.toModelArray().map((variation) => (
-              <Col md={6} sm={12}>
+              <Col md={6} sm={12} className="mb-6">
                 <ProductWrapper className="pb-4">
                   <ProductImage src={getImageUrl(variation)} />
                   <ProductInfoWrapper>

@@ -3,14 +3,16 @@
  *   All rights reserved.
  */
 import dayjs from 'dayjs';
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCartProducts } from '../../lib/features/cart-product/cart-product.selectors';
 import { createOrderAction } from '../../lib/features/order/order.actions';
 import { useAppDispatch } from '../../lib/hooks';
-import { selectOrders } from '../../lib/features/order/order.selectors';
+import { clearCartAction } from '../../lib/features/cart-product/cart-product.actions';
+import { useNavigate } from 'react-router';
 
 export const useCheckout = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [date, setDate] = useState<dayjs.Dayjs | null>(null);
   const [time, setTime] = useState<dayjs.Dayjs | null>(null);
@@ -18,7 +20,6 @@ export const useCheckout = () => {
   const [phone, setPhone] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const products = useSelector(selectCartProducts);
-  const orders = useSelector(selectOrders);
 
   const onChangeName = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => setName(e.target.value),
@@ -67,6 +68,9 @@ export const useCheckout = () => {
           deliveryDate: timestamp,
         }),
       );
+
+      dispatch(clearCartAction());
+      navigate('/orders');
     }
   }, [name, address, phone, date, time, products]);
 
