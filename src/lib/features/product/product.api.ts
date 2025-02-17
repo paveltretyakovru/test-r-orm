@@ -67,3 +67,36 @@ export const getProductsOfCategories = async (
 
   return products;
 };
+
+export const getProductsOfCategoriesPerPage = async (
+  categoriesIds: CategorySchema['id'][],
+  countOfPage: number,
+  page: number,
+): Promise<ProductsResponse> => {
+  const products: ProductsResponse = [];
+
+  let start;
+  if (page === 1) {
+    start = 0;
+  } else {
+    start = page * countOfPage - countOfPage - 1;
+  }
+
+  const end = page * countOfPage - 1;
+
+  try {
+    const response = await api.get<ProductsResponse>(
+      `/api/Products?sort=["name","ASC"]&filter={"category_id":[${categoriesIds.join(',')}]}&range=[${start},${end}]`,
+    );
+
+    products.push(...response);
+  } catch (e) {
+    if (e instanceof Error) {
+      toast.error(
+        `Произошла ошибка во время загрузки изображений: ${e.message}`,
+      );
+    }
+  }
+
+  return products;
+};
