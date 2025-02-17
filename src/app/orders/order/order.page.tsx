@@ -3,56 +3,91 @@
  *   All rights reserved.
  */
 import styled from 'styled-components';
-import { Orders } from '../orders.page';
+import { ordersRoute } from '../orders.page';
 import { Col, Row } from 'react-grid-system';
 
 import demoInageUrl from '../../../lib/assets/product-demo.png';
+import noImageUrl from '../../../lib/assets/no-image.jpg';
 import arrowLeftUrl from '../../../lib/assets/arrow-left.svg';
+import { useOrder } from './use-order';
+import { useCallback } from 'react';
+import { VariationModel } from '../../../lib/features/variation/variation.types';
+import { useNavigate } from 'react-router';
 
 export const Order = () => {
+  const navigate = useNavigate();
+  const { order } = useOrder();
+
+  const getImageUrl = useCallback((variation: VariationModel) => {
+    const images = variation.product.images.toModelArray();
+
+    if (images.length) {
+      return images[0].imageUrl;
+    }
+
+    return noImageUrl;
+  }, []);
+
+  const goToOrders = useCallback(() => {
+    navigate('/orders');
+  }, []);
+
   return (
     <Wrapper>
       <Row>
         <Col>
-          <BackLink className="flex justify-start">
+          <BackLink className="flex justify-start" onClick={goToOrders}>
             <img src={arrowLeftUrl} />
             Назад
           </BackLink>
         </Col>
       </Row>
-      <Row>
-        <Col className="mt-6">
-          <Title>Заказ №Z2020-17</Title>
-        </Col>
-      </Row>
-      <Row>
-        <Col className="mt-10 mb-6">
-          <Title>Товары</Title>
-        </Col>
-      </Row>
+      {order && (
+        <>
+          <Row>
+            <Col className="mt-6">
+              <Title>Заказ №{order.getId()}</Title>
+            </Col>
+          </Row>
+          <Row>
+            <Col className="mt-10 mb-6">
+              <Title>Товары</Title>
+            </Col>
+          </Row>
 
-      <Row>
-        {/* Products */}
-        <Col md={6} sm={12}>
-          <ProductWrapper className="pb-4">
-            <ProductImage src={demoInageUrl} />
-            <ProductInfoWrapper>
-              <ProductName>
-                Смартфон Xiaomi Redmi Note 8 Pro 6/128GB, белый
-              </ProductName>
-              <ProductCountWrapper>
-                <ProductPrice>1 000₽/шт.</ProductPrice>
-                <ProductCount>10/10 шт.</ProductCount>
-              </ProductCountWrapper>
-            </ProductInfoWrapper>
-          </ProductWrapper>
-        </Col>
-      </Row>
+          <Row>
+            {/* Products */}
+            {order.variations.toModelArray().map((variation) => (
+              <Col md={6} sm={12}>
+                <ProductWrapper className="pb-4">
+                  <ProductImage src={getImageUrl(variation)} />
+                  <ProductInfoWrapper>
+                    <ProductName>{variation.product.name}</ProductName>
+                    <ProductCountWrapper className="mt-4">
+                      <ProductPrice>{variation.price} ₽/шт.</ProductPrice>
+                      <ProductCount>
+                        {(() => {
+                          const count = order.counts.find(
+                            (c) => c.variationId === variation.id,
+                          );
+
+                          return count?.count || 0;
+                        })()}{' '}
+                        шт.
+                      </ProductCount>
+                    </ProductCountWrapper>
+                  </ProductInfoWrapper>
+                </ProductWrapper>
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}
     </Wrapper>
   );
 };
 
-Order.route = `${Orders.route}/:id`;
+Order.route = `/orders/:id`;
 
 const ProductCount = styled.div`
   font-size: 16px;
@@ -82,16 +117,23 @@ const ProductName = styled.div`
   font-size: 12px;
   letter-spacing: 0px;
   color: var(--text);
+
+  display: inline-block;
+  overflow: hidden !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const ProductInfoWrapper = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
 `;
 
 const ProductImage = styled.img`
   width: 60px;
   height: 60px;
+  margin-right: 20px;
 `;
 
 const ProductWrapper = styled.div`
@@ -109,6 +151,7 @@ const Title = styled.div`
 `;
 
 const BackLink = styled.div`
+  cursor: pointer;
   font-family: Raleway;
   font-weight: 600;
   font-size: 16px;

@@ -112,6 +112,7 @@ const Image = styled.img`
 `;
 
 const Link = styled.span`
+  cursor: pointer;
   font-family: Raleway;
   font-weight: 600;
   font-size: 12px;

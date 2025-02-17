@@ -29,7 +29,8 @@ export const Orders = () => {
   );
 };
 
-Orders.route = '/orders';
+export const ordersRoute = '/orders';
+Orders.route = ordersRoute;
 
 const Wrapper = styled.div``;
 
