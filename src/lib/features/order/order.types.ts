@@ -3,9 +3,9 @@
  *   All rights reserved.
  */
 import { QuerySet, SessionBoundModel } from 'redux-orm';
-import { VariationModels, VariationSchema } from '../variation/variation.types';
+import Variation from '../variation/variation.model';
+import { VariationSchema } from '../variation/variation.types';
 import { Order } from './order.model';
-import { CartProductModels } from '../cart-product/cart-product.types';
 
 export enum OrderStatus {
   cart, // — товары добавлены в корзину, но заказ еще не оформлен.
@@ -14,6 +14,16 @@ export enum OrderStatus {
   completed, // — заказ завершен (товары доставлены или получены).
   cancelled, // — заказ отменен.
 }
+
+export const OrderStatusValue: {
+  [key in OrderStatus]: string;
+} = {
+  [OrderStatus.cart]: 'Не оформлен',
+  [OrderStatus.pending]: 'Оформлен',
+  [OrderStatus.processing]: 'Обрабатывается',
+  [OrderStatus.completed]: 'Завершён',
+  [OrderStatus.cancelled]: 'Отменён',
+};
 
 export interface OrderSchema {
   // State
@@ -35,7 +45,7 @@ export interface OrderSchema {
   createdAt: number | null;
 
   // Related fields
-  variations: QuerySet<Order, OrderSchema>;
+  variations: QuerySet<Variation, VariationSchema>;
 }
 
 export type OrderModel = SessionBoundModel<Order, OrderSchema>;

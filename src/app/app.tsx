@@ -11,6 +11,7 @@ import { Product } from './product/product.page';
 import { NotFound } from './not-found.page';
 import { Checkout } from './checkout/checkout.page';
 import { Orders } from './orders/orders.page';
+import { Order } from './orders/order/order.page';
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
 
         {/* Orders */}
         <Route path={Orders.route} element={<Orders />} />
+        <Route path={Order.route} element={<Order />} />
 
         {/* System routes */}
         <Route path={NotFound.route} element={<NotFound />} />

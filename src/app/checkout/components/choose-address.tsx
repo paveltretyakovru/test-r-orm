@@ -34,6 +34,12 @@ export const ChooseAddress = ({ onDone }: Props) => {
     }
   }, []);
 
+  const done = useCallback(() => {
+    if (onDone) {
+      onDone(address);
+    }
+  }, [address]);
+
   return (
     <div
       style={{

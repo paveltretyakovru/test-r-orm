@@ -5,8 +5,11 @@
 import { Col, Row } from 'react-grid-system';
 import styled from 'styled-components';
 import { OrderCard } from './components/order-card';
+import { useOrders } from './use-orders';
 
 export const Orders = () => {
+  const { orders } = useOrders();
+
   return (
     <Wrapper>
       <Row>
@@ -17,7 +20,9 @@ export const Orders = () => {
 
       <Row>
         <Col md={6} sm={12}>
-          <OrderCard />
+          {orders.map((order) => (
+            <OrderCard key={order.id} order={order} />
+          ))}
         </Col>
       </Row>
     </Wrapper>

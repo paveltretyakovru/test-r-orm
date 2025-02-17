@@ -4,38 +4,73 @@
  */
 import styled from 'styled-components';
 
-import logoUrl from '../assets/mi.png';
+import dayjs from 'dayjs';
+import { useCallback, useMemo } from 'react';
+import noImageUrl from '../../../lib/assets/no-image.jpg';
+import {
+  OrderModel,
+  OrderStatusValue,
+} from '../../../lib/features/order/order.types';
+import { VariationModel } from '../../../lib/features/variation/variation.types';
 import arrowUpUrl from '../assets/arrow-up.png';
+import { useNavigate } from 'react-router';
+import { Order } from '../order/order.page';
 
-export const OrderCard = () => {
+interface Props {
+  order: OrderModel;
+}
+
+export const OrderCard = ({ order }: Props) => {
+  const navigate = useNavigate();
+
+  const imageUrl = useMemo(() => {
+    const variations = order.variations.toModelArray();
+
+    if (variations.length) {
+      const images = variations[0].product.images.toModelArray();
+
+      if (images.length) {
+        return images[0].imageUrl;
+      }
+    }
+
+    return noImageUrl;
+  }, [order]);
+
+  const goToOrder = useCallback(() => {
+    if (order.id) {
+      navigate(Order.route.replace(':id', `${order.id}`));
+    }
+  }, [order]);
+
   return (
     <Wrapper>
       <Header>
         <Logo>
-          <img src={logoUrl} />
+          <Image src={imageUrl} />
         </Logo>
 
         <HeadInfo>
           <Title>Xiaomi</Title>
 
           <DateWrapper>
-            <Date>21.12.2020</Date>
-            <Link>Подробнее</Link>
+            <Date>{dayjs(order.createdAt!).format('DD.MM.YYYY HH:mm')}</Date>
+            <Link onClick={goToOrder}>Подробнее</Link>
           </DateWrapper>
         </HeadInfo>
 
-        <img height={20} src={arrowUpUrl} />
+        <img src={arrowUpUrl} />
       </Header>
 
       <DetailLine>
         <DetailBlock>
           <DetailLabel>Статус заказа</DetailLabel>
-          <Text>Оплачен/Завершён</Text>
+          <Text>{OrderStatusValue[order.status]}</Text>
         </DetailBlock>
 
         <DetailBlock>
           <DetailLabel>Номер заказа</DetailLabel>
-          <Link>#664-333</Link>
+          <Link onClick={goToOrder}>#{order.id}</Link>
         </DetailBlock>
       </DetailLine>
 
@@ -47,17 +82,34 @@ export const OrderCard = () => {
 
         <DetailBlock>
           <DetailLabel>Стоимость заказа</DetailLabel>
-          <Text>250 000₽</Text>
+          <Text>
+            {order.variations.toModelArray().reduce((prev, curr) => {
+              const variant = curr as unknown as VariationModel;
+
+              const count = order.counts.find(
+                (c) => c.variationId === curr.id,
+              )?.count;
+
+              return (count && prev + count * variant.price) || prev;
+            }, 0)}
+            ₽
+          </Text>
         </DetailBlock>
 
         <DetailBlock>
           <DetailLabel>Адрес доставки</DetailLabel>
-          <Text>ул. Коммунистич...д.1, стр.1</Text>
+          <Text>{order.address}</Text>
         </DetailBlock>
       </DetailLine>
     </Wrapper>
   );
 };
+
+const Image = styled.img`
+  height: 50px;
+  width: 50px;
+  border-radius: 999px;
+`;
 
 const Link = styled.span`
   font-family: Raleway;
