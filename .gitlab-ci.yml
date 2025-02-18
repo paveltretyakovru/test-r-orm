@@ -5,19 +5,26 @@ stages:
   - deploy
 
 cache:
+  key: npm-cache  # Добавлен ключ, чтобы кеш работал корректн
   paths:
     - node_modules/
+    - ~/.npm  # Кешируем npm-пакеты
 
 build:
   tags:
     - olymp-node
   stage: build
+  before_script:
+    - rm -rf node_modules package-lock.json yarn.lock  # Очистка кеша
+    - npm cache clean --force
+    - npx update-browserslist-db@latest  # Обновление базы браузеров
   script:
-    - npm install
+    - npm install --legacy-peer-deps  # Устанавливаем зависимости без конфликтов
     - npm run build
   artifacts:
     paths:
       - dist/
+    expire_in: 1 week  # Храним артефакты 1 неделю
 
 pages:
   stage: deploy
