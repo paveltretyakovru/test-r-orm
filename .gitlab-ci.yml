@@ -1,8 +1,5 @@
-image: node:lts-alpine  # Используем Alpine для меньшего размера
-
+image: node:16.5.0
 pages:
-  tags:
-    - olymp-node
   stage: deploy
   cache:
     key:
