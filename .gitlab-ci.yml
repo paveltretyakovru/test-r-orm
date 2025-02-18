@@ -1,36 +1,20 @@
 image: node:lts-alpine  # Используем Alpine для меньшего размера
 
-stages:
-  - build
-  - deploy
-
-cache:
-  key: npm-cache  # Уникальный ключ для кеша
-  paths:
-    - node_modules/
-    - ~/.npm/ # Кешируем npm-пакеты
-
-build:
-  tags:
-    - olymp-node
-  stage: build
-  before_script:
-    - npm cache clean --force  # Очищаем кеш npm
-    - npm install --legacy-peer-deps  # Устанавливаем зависимости без удаления package-lock.json
-    - npx update-browserslist-db@latest || true  # Обновляем базу браузеров, игнорируя ошибки
-  script:
-    - npm run build  # Собираем проект
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1 week  # Артефакты храним 1 неделю
-
 pages:
   stage: deploy
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: npm
+    paths:
+      - node_modules/
   script:
-    - mv dist public
+    - npm install
+    - npm run build
+    - cp -a dist/. public/
   artifacts:
     paths:
       - public
-  only:
-    - main
+  rules:
+    - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
