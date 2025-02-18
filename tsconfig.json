@@ -18,5 +18,5 @@
     // "baseUrl": "./src"
   },
   "references": [{ "path": "./tsconfig.node.json" }],
-  "include": ["vite.config.ts", "src"]
+  "include": ["src"]
 }

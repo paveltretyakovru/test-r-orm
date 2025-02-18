@@ -2,9 +2,10 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import { useCallback, useEffect } from 'react';
-import { Col, Row, Visible } from 'react-grid-system';
+import { useCallback } from 'react';
+import { Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { selectCartProducts } from '../../../../lib/features/cart-product/cart-product.selectors';
@@ -19,12 +20,14 @@ export function AppBar() {
 
   const navigateToRoot = useCallback(() => navigate('/'), []);
 
+  const isLargeScreen = useMediaQuery({ minWidth: 992 });
+  const isSmallScreen = useMediaQuery({ maxWidth: 991 });
+
   return (
     <Wrapper>
       <Col>
-        {/* Для больших рарешений  */}
-        <Visible lg xl xxl xxxl>
-          <Row align="center" justify="between">
+        {isLargeScreen && (
+          <Row className="items-center justify-between">
             <Col xl={2} lg={2} md={3}>
               <Logo onClick={navigateToRoot}>React</Logo>
             </Col>
@@ -44,39 +47,42 @@ export function AppBar() {
               style={{ display: 'flex', justifyContent: 'space-around' }}
             >
               <CartIcon value={cartProducts.length || 0} />
-
               <Avatar path="/avatars/ava-1.png" />
             </Col>
           </Row>
-        </Visible>
+        )}
 
-        {/* Для маленьких разрешений */}
-        <Visible md sm xs>
-          <Row align="center" justify="between">
-            <Col md={3} xs={3}>
-              <Logo onClick={navigateToRoot}>React</Logo>
-            </Col>
+        {isSmallScreen && (
+          <>
+            <Row className="items-center justify-between">
+              <Col md={3} xs={3}>
+                <Logo onClick={navigateToRoot}>React</Logo>
+              </Col>
 
-            <Col xs={5} md={4}>
-              <Location />
-            </Col>
+              <Col xs={5} md={4}>
+                <Location />
+              </Col>
 
-            <Col
-              xs={4}
-              md={3}
-              style={{ display: 'flex', justifyContent: 'space-around' }}
+              <Col
+                xs={4}
+                md={3}
+                style={{ display: 'flex', justifyContent: 'space-around' }}
+              >
+                <CartIcon value={cartProducts.length || 0} />
+                <Avatar path="/avatars/ava-1.png" />
+              </Col>
+            </Row>
+
+            <Row
+              className="items-center justify-between"
+              style={{ marginTop: 20 }}
             >
-              <CartIcon value={cartProducts.length || 0} />
-              <Avatar path="/avatars/ava-1.png" />
-            </Col>
-          </Row>
-
-          <Row align="center" justify="between" style={{ marginTop: 20 }}>
-            <Col>
-              <Search />
-            </Col>
-          </Row>
-        </Visible>
+              <Col>
+                <Search />
+              </Col>
+            </Row>
+          </>
+        )}
       </Col>
     </Wrapper>
   );

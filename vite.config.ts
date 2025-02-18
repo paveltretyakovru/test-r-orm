@@ -19,5 +19,5 @@ export default defineConfig({
     mockReset: true,
   },
 
-  base: '/employers/cezyo/shop-redux-orm/',
+  // base: '/employers/cezyo/shop-redux-orm/',
 });

@@ -4,7 +4,7 @@
  */
 import styled from 'styled-components';
 import { ordersRoute } from '../orders.page';
-import { Col, Row } from 'react-grid-system';
+import { Col, Row } from 'react-bootstrap';
 
 import demoInageUrl from '../../../lib/assets/product-demo.png';
 import noImageUrl from '../../../lib/assets/no-image.jpg';

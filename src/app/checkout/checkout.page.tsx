@@ -2,7 +2,7 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import { Col, Row } from 'react-grid-system';
+import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 
 import { DateTimePicker, MobileTimePicker } from '@mui/x-date-pickers';
@@ -32,7 +32,7 @@ export const Checkout = () => {
 
   return (
     <Wrapper>
-      <Row align="start">
+      <Row className="items-start">
         <Col md={4}>
           <Title>Доставка</Title>
         </Col>

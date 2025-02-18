@@ -13,6 +13,8 @@ import { Checkout } from './checkout/checkout.page';
 import { Orders } from './orders/orders.page';
 import { Order } from './orders/order/order.page';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const App = () => {
   return (
     <Routes>

@@ -2,7 +2,7 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import { Col, Row } from 'react-grid-system';
+import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { OrderCard } from './components/order-card';
 import { useOrders } from './use-orders';

@@ -3,9 +3,10 @@
  *   All rights reserved.
  */
 
-import { Col, Container, Hidden, Row, Visible } from 'react-grid-system';
+import { Col, Container, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { useCallback } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { AppBar } from './compoennts/app-bar';
 import { Banner } from './compoennts/banner';
 
@@ -24,27 +25,27 @@ export default function Layout() {
 
   const navigateToRoot = useCallback(() => navigate('/'), []);
 
+  const isSmallScreen = useMediaQuery({ maxWidth: 768 });
+  const isLargeScreen = useMediaQuery({ minWidth: 992 });
+
   return (
     <>
-      <MainContainer>
+      <MainContainer style={{ margin: 'auto' }}>
         <Row style={{ flexGrow: 1 }}>
           <Col>
             <Row style={{ height: '100%' }}>
-              {/* md:border-r border-solid border-r-border */}
               <Col>
-                {/* App bar */}
                 <AppBar />
 
                 {/* Baners small devices */}
-                <Visible sm xs>
+                {isSmallScreen && (
                   <BannersRow>
                     <Col>
                       <Banner smallDevice={true} onClick={bannerClick} />
                     </Col>
                   </BannersRow>
-                </Visible>
+                )}
 
-                {/* Main content */}
                 <Row>
                   <Col>
                     <main>
@@ -55,11 +56,11 @@ export default function Layout() {
               </Col>
 
               {/* Banners big devices */}
-              <Hidden sm xs>
+              {isLargeScreen && (
                 <BigBannerCol md={3}>
                   <Banner onClick={bannerClick} />
                 </BigBannerCol>
-              </Hidden>
+              )}
             </Row>
           </Col>
         </Row>
@@ -67,8 +68,11 @@ export default function Layout() {
 
       <Footer>
         <Container>
-          <Row align="center" justify="between" style={{ minHeight: 160 }}>
-            <Visible xs md sm>
+          <Row
+            className="items-center justify-between"
+            style={{ minHeight: 160 }}
+          >
+            {isSmallScreen && (
               <Col
                 xs={12}
                 md={6}
@@ -76,9 +80,9 @@ export default function Layout() {
               >
                 <Logo onClick={navigateToRoot}>React</Logo>
               </Col>
-            </Visible>
+            )}
 
-            <Hidden xs md sm>
+            {isLargeScreen && (
               <Col
                 xs={12}
                 md={6}
@@ -86,19 +90,15 @@ export default function Layout() {
               >
                 <Logo onClick={navigateToRoot}>React</Logo>
               </Col>
-            </Hidden>
+            )}
 
             <Col xs={12} md={3}>
               <Contacts>
                 <Socials>
-                  <Hidden xs md sm>
-                    <ContactLabel>Присоединяйтесь к нам</ContactLabel>
-                  </Hidden>
+                  <ContactLabel>Присоединяйтесь к нам</ContactLabel>
                   <ContactImages>
                     <img src={facebookImageUrl} width={28} height={28} alt="" />
-
                     <img src={vkImageUrl} width={28} height={28} alt="" />
-
                     <img src={instaImageUrl} width={28} height={28} alt="" />
                   </ContactImages>
                 </Socials>
@@ -108,35 +108,31 @@ export default function Layout() {
             <Col xs={12} md={3}>
               <Contacts>
                 <Stores>
-                  <Hidden xs md sm>
+                  {isLargeScreen && (
                     <ContactLabel>Устанавливайте приложение</ContactLabel>
-                  </Hidden>
+                  )}
                   <ContactImages>
                     <img src={gplayImageUrl} width={104} height={32} alt="" />
-
                     <img src={astoreImageUrl} width={104} height={32} alt="" />
                   </ContactImages>
                 </Stores>
               </Contacts>
             </Col>
           </Row>
-          <Row style={{ marginTop: 'auto' }} justify="center">
+          <Row style={{ marginTop: 'auto', justifyContent: 'center' }}>
             <Col>
-              <Visible xs md sm>
+              {isSmallScreen && (
                 <CopyrightWrapper style={{ zoom: '0.7', marginTop: 20 }}>
-                  ©Sionic
-                  <a href="#">Правовая информация</a>{' '}
+                  ©Sionic <a href="#">Правовая информация</a>{' '}
                   <a href="#">Политика конфиденциальности</a>
                 </CopyrightWrapper>
-              </Visible>
+              )}
 
-              <Hidden xs md sm>
-                <CopyrightWrapper>
-                  <span>©Sionic</span>
-                  <a href="#">Правовая информация</a>{' '}
-                  <a href="#">Политика конфиденциальности</a>
-                </CopyrightWrapper>
-              </Hidden>
+              <CopyrightWrapper>
+                <span>©Sionic</span>
+                <a href="#">Правовая информация</a>{' '}
+                <a href="#">Политика конфиденциальности</a>
+              </CopyrightWrapper>
             </Col>
           </Row>
         </Container>
@@ -161,16 +157,18 @@ const CopyrightWrapper = styled.div`
 const Contacts = styled.div`
   display: flex;
   justify-content: center;
-  /* flex-wrap: wrap; */
 `;
+
 const Socials = styled.div``;
 
 const Stores = styled(Socials)`
   margin-right: 0px;
 `;
+
 const ContactLabel = styled.div`
   white-space: nowrap;
 `;
+
 const ContactImages = styled.div`
   display: flex;
   margin-top: 10px;
@@ -202,7 +200,6 @@ const MainContainer = styled(Container)`
 
 const BannersRow = styled(Row)`
   border-left: 1px solid #f0f4fb;
-  /* background-color: var(--color-check); */
 `;
 
 const Footer = styled.footer`

@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useMemo } from 'react';
-import { Col, Row } from 'react-grid-system';
+import { Col, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { VariationPropertySchema } from '../../lib/features/variation-property/variation-property.types';

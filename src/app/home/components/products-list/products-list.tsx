@@ -7,7 +7,7 @@ import { Skeleton } from '../../../../lib/ui/skeleton';
 import { ProductCard } from './product-card';
 import { useProductList } from './use-product-list';
 import { Button } from '../../../../lib/ui/button';
-import { Col, Row } from 'react-grid-system';
+import { Col, Row } from 'react-bootstrap';
 
 export function ProductsList() {
   const { loading, products, nextPage, finished } = useProductList();

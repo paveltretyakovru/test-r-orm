@@ -2,7 +2,7 @@
  *   Copyright (c) 2025 Olymp.Digital
  *   All rights reserved.
  */
-import { Col, Row } from 'react-grid-system';
+import { Col, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { Button } from '../../lib/ui/button';
 import deleteImageUrl from './assets/delete.svg';
@@ -25,7 +25,7 @@ export function Cart() {
 
   return (
     <Wrapper>
-      <Row align="end">
+      <Row className="items-end">
         <Col md={4}>
           <Title>Корзина</Title>
         </Col>
@@ -39,7 +39,7 @@ export function Cart() {
         <Col>
           <ContentWrapper>
             <Header data-testid="Header">
-              <Row align="center" style={{ height: '100%' }}>
+              <Row style={{ height: '100%', alignItems: 'center' }}>
                 <Col>
                   <HeaderTitle className="md:p-6">Xiaomi</HeaderTitle>
                 </Col>
@@ -68,7 +68,7 @@ export function Cart() {
                 <ProductListWrapper>
                   {products.map((item) => (
                     <>
-                      <Row align="center" justify="center">
+                      <Row className="items-center justify-center">
                         <Col
                           md={11}
                           style={{
@@ -77,7 +77,7 @@ export function Cart() {
                           }}
                         />
                       </Row>
-                      <Row key={item.cartProduct.id} align="center">
+                      <Row key={item.cartProduct.id} className="items-center">
                         {/* <ProductWrapper> */}
                         <Col md={12} lg={2}>
                           <ProductImage>
