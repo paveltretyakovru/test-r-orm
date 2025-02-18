@@ -9,6 +9,8 @@ cache:
     - node_modules/
 
 build:
+  tags:
+    - olymp-node
   stage: build
   script:
     - npm install
