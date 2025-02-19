@@ -19,5 +19,5 @@ export default defineConfig({
     mockReset: true,
   },
 
-  base: '',
+  base: '/test-r-orm/',
 });

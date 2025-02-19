@@ -22,7 +22,7 @@ if (container) {
   root.render(
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <BrowserRouter>
+        <BrowserRouter basename="/test-r-orm">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ColorsGlobal />
             <App />
