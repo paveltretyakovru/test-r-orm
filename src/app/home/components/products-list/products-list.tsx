@@ -28,7 +28,7 @@ export function ProductsList() {
       </Wrapper>
 
       <Row>
-        <Col>
+        <Col className="mb-[40px]">
           {!finished && (
             <Button onClick={nextPage}>
               {(loading && <Loader />) || 'Загрузить ещё'}
@@ -113,5 +113,6 @@ const Wrapper = styled.div`
   gap: 30px;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 135px;
+  margin-bottom: 40px;
+  justify-content: space-around;
 `;

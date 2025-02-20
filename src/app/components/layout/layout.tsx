@@ -25,7 +25,7 @@ export default function Layout() {
 
   const navigateToRoot = useCallback(() => navigate('/'), []);
 
-  const isSmallScreen = useMediaQuery({ maxWidth: 768 });
+  const isSmallScreen = useMediaQuery({ maxWidth: 991 });
   const isLargeScreen = useMediaQuery({ minWidth: 992 });
 
   return (
@@ -39,7 +39,7 @@ export default function Layout() {
 
                 {/* Baners small devices */}
                 {isSmallScreen && (
-                  <BannersRow>
+                  <BannersRow className="border-0">
                     <Col>
                       <Banner smallDevice={true} onClick={bannerClick} />
                     </Col>
